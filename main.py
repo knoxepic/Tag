@@ -1,53 +1,95 @@
 from telethon import TelegramClient, events
-from telethon.tl.functions.messages import GetDialogsRequest
-from telethon.tl.types import InputPeerEmpty
 import asyncio
+import os
 
-# API Details (Apni values yaha dalein)
-api_id = 29568441  # Apna api_id dalein
-api_hash = 'b32ec0fb66d22da6f77d355fbace4f2a'
-bot_token = '8574288227:AAGT1pauRQSnUiTbxVPPFVJl5SGS-Olh968'
+# API Details (Render environment variables se le sakte ho)
+API_ID = int(os.environ.get('API_ID', 1234567))  # Default value, Render me set karna
+API_HASH = os.environ.get('API_HASH', 'apna_api_hash')
+BOT_TOKEN = os.environ.get('BOT_TOKEN', 'apna_bot_token')
 
-# Bot Client
-bot = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
+# Global client variable
+client = None
 
-@bot.on(events.NewMessage(pattern='/tagall'))
-async def tagall(event):
-    # Sirf groups me kaam karega
-    if event.is_group:
-        msg = await event.reply("🔄 Saare members ko mention kar raha hoon...")
+async def main():
+    global client
+    try:
+        # Client initialize with explicit loop
+        client = TelegramClient('bot', api_id, api_hash)
+        await client.start(bot_token=bot_token)
         
-        # Group ke saare members nikalna
-        members = await bot.get_participants(event.chat_id)
+        print("🤖 Bot successfully started!")
         
-        # Mentions list banana
-        mentions = ""
-        count = 0
-        for user in members:
-            if not user.bot and not user.deleted:  # Sirf real users ko tag karega
-                mention = f"[{user.first_name}](tg://user?id={user.id})"
+        @client.on(events.NewMessage(pattern='/start'))
+        async def start_handler(event):
+            await event.reply("👋 Main group mention bot hoon!\n/tagall se saare members ko tag kar sakte ho.")
+        
+        @client.on(events.NewMessage(pattern='/tagall'))
+        async def tagall_handler(event):
+            if not event.is_group:
+                await event.reply("⚠️ Ye command sirf groups me kaam karegi.")
+                return
+            
+            try:
+                msg = await event.reply("🔄 Saare members ko mention kar raha hoon...")
                 
-                # Ek message me 50 members tak mention karega (Telegram limit)
-                if count <= 50:
-                    mentions += mention + " "
-                    count += 1
-                else:
+                # Group ke members nikalna
+                members = await client.get_participants(event.chat_id)
+                
+                mentions = ""
+                count = 0
+                
+                for user in members:
+                    if not user.bot and not user.deleted:
+                        mention = f"[{user.first_name}](tg://user?id={user.id})"
+                        
+                        if count < 50:
+                            mentions += mention + " "
+                            count += 1
+                        else:
+                            await event.reply(mentions)
+                            mentions = mention + " "
+                            count = 1
+                            await asyncio.sleep(2)
+                
+                if mentions:
                     await event.reply(mentions)
-                    mentions = mention + " "
-                    count = 1
-                    await asyncio.sleep(2)  # 2 second ka gap
+                
+                await msg.delete()
+                
+            except Exception as e:
+                await event.reply(f"❌ Error: {str(e)}")
         
-        # Bache hue mentions bhejna
-        if mentions:
-            await event.reply(mentions)
+        @client.on(events.NewMessage)
+        async def error_handler(event):
+            pass  # Ignore other messages
         
-        await msg.delete()
-    else:
-        await event.reply("⚠️ Ye command sirf groups me kaam karegi.")
+        # Client ko chalte rahne dena
+        await client.run_until_disconnected()
+        
+    except Exception as e:
+        print(f"❌ Error in main: {e}")
+    finally:
+        if client:
+            await client.disconnect()
 
-@bot.on(events.NewMessage(pattern='/start'))
-async def start(event):
-    await event.reply("👋 Main group mention bot hoon!\n/tagall se saare members ko tag kar sakte ho.")
+def run_bot():
+    """Bot ko start karne ka main function"""
+    try:
+        # Python 3.7+ ke liye asyncio.run() use karo
+        asyncio.run(main())
+    except RuntimeError as e:
+        # Agar already event loop hai to alag tarike se handle karo
+        if 'already running' in str(e).lower():
+            loop = asyncio.get_event_loop()
+            loop.create_task(main())
+            loop.run_forever()
+        else:
+            print(f"❌ Runtime error: {e}")
+    except KeyboardInterrupt:
+        print("\n👋 Bot stopped by user")
+    except Exception as e:
+        print(f"❌ Unexpected error: {e}")
 
-print("🤖 Bot chal raha hai...")
-bot.run_until_disconnected()
+if __name__ == "__main__":
+    print("🚀 Starting mention bot for Render...")
+    run_bot()
