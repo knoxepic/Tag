@@ -22,6 +22,8 @@ api_hash = os.environ.get('API_HASH', 'b6320c0cc62a97d3a7d4e3055e6b9e0d')
 bot_token = os.environ.get('BOT_TOKEN', '7798323410:AAEr5G-_15rq1H1QTTz7sWjSpEaLzN_7tuU')
 
 OWNER_ID = 7957361876  # <-- APNI ID YAHAN DALEIN
+
+# Admin list - initially sirf aap
 ADMIN_IDS = [OWNER_ID]
 
 # User language preferences
@@ -33,10 +35,65 @@ STOP_FILE = "stop.txt"
 LANG_FILE = "languages.json"
 
 # ==============================================
-# LANGUAGE FUNCTIONS
+# FUNCTIONS DEFINITIONS - PEHLE DEFINE KARO
 # ==============================================
 
+def load_admins():
+    """Load admins from file"""
+    global ADMIN_IDS
+    try:
+        if os.path.exists(ADMIN_FILE):
+            with open(ADMIN_FILE, 'r') as f:
+                ids = f.read().strip().split(',')
+                if ids and ids[0]:
+                    ADMIN_IDS = [int(id) for id in ids if id]
+    except:
+        pass
+    if OWNER_ID not in ADMIN_IDS:
+        ADMIN_IDS.append(OWNER_ID)
+        save_admins()
+    print(f"📂 Loaded admins: {ADMIN_IDS}")
+
+def save_admins():
+    """Save admins to file"""
+    try:
+        with open(ADMIN_FILE, 'w') as f:
+            f.write(','.join(str(id) for id in ADMIN_IDS))
+    except:
+        pass
+
+def is_stopped(chat_id):
+    """Check if mentions are stopped in this chat"""
+    try:
+        if os.path.exists(STOP_FILE):
+            with open(STOP_FILE, 'r') as f:
+                stopped_chats = f.read().split(',')
+                return str(chat_id) in stopped_chats
+    except:
+        pass
+    return False
+
+def set_stop(chat_id, stop=True):
+    """Stop or resume mentions in a chat"""
+    try:
+        stopped = []
+        if os.path.exists(STOP_FILE):
+            with open(STOP_FILE, 'r') as f:
+                stopped = f.read().split(',')
+        
+        chat_id_str = str(chat_id)
+        if stop and chat_id_str not in stopped:
+            stopped.append(chat_id_str)
+        elif not stop and chat_id_str in stopped:
+            stopped.remove(chat_id_str)
+        
+        with open(STOP_FILE, 'w') as f:
+            f.write(','.join(stopped))
+    except:
+        pass
+
 def load_user_languages():
+    """Load user language preferences"""
     global user_languages
     try:
         if os.path.exists(LANG_FILE):
@@ -46,6 +103,7 @@ def load_user_languages():
         user_languages = {}
 
 def save_user_languages():
+    """Save user language preferences"""
     try:
         with open(LANG_FILE, 'w') as f:
             json.dump(user_languages, f)
@@ -63,7 +121,9 @@ def get_text(user_id, key, **kwargs):
     text = lang_dict.get(key, LANGUAGES['en_in'].get(key, key))
     return text.format(**kwargs)
 
-# Load saved data
+# ==============================================
+# LOAD SAVED DATA - AB CALL KARO
+# ==============================================
 load_admins()
 load_user_languages()
 
@@ -137,14 +197,22 @@ def get_settings_buttons(user_id):
     return buttons
 
 def get_language_buttons(user_id):
-    """Get language selection buttons - 2 per row for better display"""
+    """Get language selection buttons - 2 per row"""
     buttons = []
     
-    # Top Telegram countries first
+    # Top Telegram countries
+    top_countries = [
+        ('hi', '🇮🇳', 'हिंदी'),
+        ('en_in', '🇮🇳', 'English'),
+        ('id', '🇮🇩', 'Indonesia'),
+        ('ru', '🇷🇺', 'Русский'),
+        ('ar_eg', '🇪🇬', 'العربية'),
+        ('pt_br', '🇧🇷', 'Português'),
+    ]
+    
     row = []
-    for lang_code, country, flag, desc in TOP_TELEGRAM_COUNTRIES[:6]:
-        lang_name = LANGUAGE_NAMES.get(lang_code, lang_code)
-        button_text = f"{flag} {lang_name}"
+    for lang_code, flag, name in top_countries:
+        button_text = f"{flag} {name}"
         row.append(Button.inline(button_text, f'lang_{lang_code}'.encode()))
         if len(row) == 2:
             buttons.append(row)
@@ -152,7 +220,8 @@ def get_language_buttons(user_id):
     if row:
         buttons.append(row)
     
-    # Other languages
+    # More languages button
+    buttons.append([Button.inline("🌐 More Languages", b'lang_more')])
     buttons.append([Button.inline(get_text(user_id, 'back_btn'), b'main_menu')])
     
     return buttons
@@ -193,7 +262,7 @@ async def callback_handler(event):
         await event.edit(
             "📞 **Support Group**\n\n"
             "Join our support group for help:\n"
-            "https://t.me/vasukiempire",
+            "https://t.me/your_support_group",
             buttons=[[Button.inline(get_text(user_id, 'back_btn'), b'main_menu')]]
         )
     
@@ -224,6 +293,37 @@ async def callback_handler(event):
             buttons=get_language_buttons(user_id)
         )
     
+    elif data == 'lang_more':
+        # More languages
+        all_langs = [
+            ('ms', '🇲🇾', 'Malaysia'),
+            ('ar_sa', '🇸🇦', 'Saudi Arabia'),
+            ('ar_ae', '🇦🇪', 'UAE'),
+            ('uk', '🇺🇦', 'Ukraine'),
+            ('kk', '🇰🇿', 'Kazakhstan'),
+            ('de', '🇩🇪', 'Germany'),
+            ('fr', '🇫🇷', 'France'),
+            ('it', '🇮🇹', 'Italy'),
+            ('es', '🇪🇸', 'Spain'),
+            ('nl', '🇳🇱', 'Netherlands'),
+            ('pl', '🇵🇱', 'Poland'),
+            ('en_ng', '🇳🇬', 'Nigeria'),
+        ]
+        
+        buttons = []
+        row = []
+        for lang_code, flag, name in all_langs:
+            button_text = f"{flag} {name}"
+            row.append(Button.inline(button_text, f'lang_{lang_code}'.encode()))
+            if len(row) == 2:
+                buttons.append(row)
+                row = []
+        if row:
+            buttons.append(row)
+        
+        buttons.append([Button.inline(get_text(user_id, 'back_btn'), b'language')])
+        await event.edit("🌐 **More Languages**", buttons=buttons)
+    
     elif data == 'main_menu':
         # Back to main menu
         status = '👑 ADMIN' if user_id in ADMIN_IDS else '👤 USER'
@@ -246,7 +346,7 @@ async def callback_handler(event):
         user_languages[str(user_id)] = lang_code
         save_user_languages()
         
-        await event.answer(f"Language changed to {LANGUAGE_NAMES.get(lang_code, lang_code)}!")
+        await event.answer(f"Language changed!")
         
         # Refresh menu in new language
         status = '👑 ADMIN' if user_id in ADMIN_IDS else '👤 USER'
@@ -360,7 +460,6 @@ async def hello_handler(event):
         msg = await event.reply("🔄 Preparing mentions...")
         members = await client.get_participants(event.chat_id)
         
-        # Similar mention logic
         mentions = ""
         count = 0
         total = 0
@@ -387,68 +486,6 @@ async def hello_handler(event):
         
         await msg.delete()
         await event.reply(f"✅ {total} members mentioned!")
-        
-    except Exception as e:
-        await event.reply(f"❌ Error: {str(e)}")
-
-@client.on(events.NewMessage(pattern='/online'))
-async def online_handler(event):
-    """Mention online members"""
-    if not event.is_group:
-        await event.reply(get_text(event.sender_id, 'group_only'))
-        return
-    
-    user_id = event.sender_id
-    if user_id not in ADMIN_IDS:
-        await event.reply(get_text(user_id, 'admin_only'))
-        return
-    
-    if is_stopped(event.chat_id):
-        await event.reply(get_text(user_id, 'stopped'))
-        return
-    
-    try:
-        msg = await event.reply("🔄 Finding online members...")
-        members = await client.get_participants(event.chat_id)
-        
-        online_users = []
-        for user in members:
-            if not user.bot and not user.deleted:
-                if hasattr(user, 'status') and isinstance(user.status, UserStatusOnline):
-                    online_users.append(user)
-        
-        if not online_users:
-            await event.reply("😴 No online members found!")
-            await msg.delete()
-            return
-        
-        # Send mentions for online users
-        mentions = ""
-        count = 0
-        total = 0
-        bot_me = await client.get_me()
-        
-        for user in online_users:
-            if user.id != bot_me.id:
-                emoji = "🟢"
-                mention = f"[{emoji}](tg://user?id={user.id})"
-                
-                if count < 50:
-                    mentions += mention + " "
-                    count += 1
-                    total += 1
-                else:
-                    await event.reply(f"🟢 **Online Members:**\n\n{mentions}")
-                    mentions = mention + " "
-                    count = 1
-                    total += 1
-                    await asyncio.sleep(2)
-        
-        if mentions:
-            await event.reply(f"🟢 **Online Members:**\n\n{mentions}")
-        
-        await msg.delete()
-        await event.reply(f"✅ {total} online members mentioned!")
         
     except Exception as e:
         await event.reply(f"❌ Error: {str(e)}")
@@ -678,59 +715,6 @@ async def ping_handler(event):
     ms = (end - start).microseconds / 1000
     await msg.edit(f"🏓 **Pong!**\n**Response time:** `{ms}ms`")
 
-# ==============================================
-# STOP/RESUME
-# ==============================================
-
-def is_stopped(chat_id):
-    try:
-        if os.path.exists(STOP_FILE):
-            with open(STOP_FILE, 'r') as f:
-                stopped = f.read().split(',')
-                return str(chat_id) in stopped
-    except:
-        pass
-    return False
-
-def set_stop(chat_id, stop=True):
-    try:
-        stopped = []
-        if os.path.exists(STOP_FILE):
-            with open(STOP_FILE, 'r') as f:
-                stopped = f.read().split(',')
-        
-        chat_id_str = str(chat_id)
-        if stop and chat_id_str not in stopped:
-            stopped.append(chat_id_str)
-        elif not stop and chat_id_str in stopped:
-            stopped.remove(chat_id_str)
-        
-        with open(STOP_FILE, 'w') as f:
-            f.write(','.join(stopped))
-    except:
-        pass
-
-def load_admins():
-    global ADMIN_IDS
-    try:
-        if os.path.exists(ADMIN_FILE):
-            with open(ADMIN_FILE, 'r') as f:
-                ids = f.read().strip().split(',')
-                if ids and ids[0]:
-                    ADMIN_IDS = [int(id) for id in ids if id]
-    except:
-        pass
-    if OWNER_ID not in ADMIN_IDS:
-        ADMIN_IDS.append(OWNER_ID)
-        save_admins()
-
-def save_admins():
-    try:
-        with open(ADMIN_FILE, 'w') as f:
-            f.write(','.join(str(id) for id in ADMIN_IDS))
-    except:
-        pass
-
 @client.on(events.NewMessage(pattern='/stop'))
 async def stop_handler(event):
     """Stop mentions in group"""
@@ -760,6 +744,80 @@ async def resume_handler(event):
     
     set_stop(event.chat_id, False)
     await event.reply("▶️ Mentions resumed in this group!")
+
+@client.on(events.NewMessage(pattern='/online'))
+async def online_handler(event):
+    """Mention online members"""
+    if not event.is_group:
+        await event.reply(get_text(event.sender_id, 'group_only'))
+        return
+    
+    user_id = event.sender_id
+    if user_id not in ADMIN_IDS:
+        await event.reply(get_text(user_id, 'admin_only'))
+        return
+    
+    if is_stopped(event.chat_id):
+        await event.reply(get_text(user_id, 'stopped'))
+        return
+    
+    try:
+        msg = await event.reply("🔄 Finding online members...")
+        members = await client.get_participants(event.chat_id)
+        
+        online_users = []
+        for user in members:
+            if not user.bot and not user.deleted:
+                if hasattr(user, 'status') and isinstance(user.status, UserStatusOnline):
+                    online_users.append(user)
+        
+        if not online_users:
+            await event.reply("😴 No online members found!")
+            await msg.delete()
+            return
+        
+        mentions = ""
+        count = 0
+        total = 0
+        bot_me = await client.get_me()
+        
+        for user in online_users:
+            if user.id != bot_me.id:
+                mention = f"[🟢](tg://user?id={user.id})"
+                
+                if count < 50:
+                    mentions += mention + " "
+                    count += 1
+                    total += 1
+                else:
+                    await event.reply(f"🟢 **Online Members:**\n\n{mentions}")
+                    mentions = mention + " "
+                    count = 1
+                    total += 1
+                    await asyncio.sleep(2)
+        
+        if mentions:
+            await event.reply(f"🟢 **Online Members:**\n\n{mentions}")
+        
+        await msg.delete()
+        await event.reply(f"✅ {total} online members mentioned!")
+        
+    except Exception as e:
+        await event.reply(f"❌ Error: {str(e)}")
+
+# ==============================================
+# AUTO DETECT
+# ==============================================
+
+@client.on(events.NewMessage)
+async def message_handler(event):
+    """Auto detect group/user"""
+    if event.is_group:
+        chat_title = event.chat.title if hasattr(event.chat, 'title') else "Unknown"
+        print(f"📢 Group message in: {chat_title} (ID: {event.chat_id})")
+    elif event.is_private:
+        user = event.sender
+        print(f"💬 Private message from: {user.first_name} (ID: {user.id})")
 
 # ==============================================
 # START BOT
