@@ -1,55 +1,53 @@
 from telethon import TelegramClient, events
-from telethon.tl.functions.channels import GetParticipantsRequest
-from telethon.tl.types import ChannelParticipantsSearch
-from dotenv import load_dotenv
-import os
+from telethon.tl.functions.messages import GetDialogsRequest
+from telethon.tl.types import InputPeerEmpty
 import asyncio
 
-# Load environment variables
-load_dotenv()
-API_ID = os.getenv("API_ID")
-API_HASH = os.getenv("API_HASH")
-BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+# API Details (Apni values yaha dalein)
+api_id = 29568441  # Apna api_id dalein
+api_hash = 'b32ec0fb66d22da6f77d355fbace4f2a'
+bot_token = '8574288227:AAGT1pauRQSnUiTbxVPPFVJl5SGS-Olh968'
 
-# Initialize the client
-client = TelegramClient('bot_session', API_ID, API_HASH)
+# Bot Client
+bot = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
 
-async def main():
-    await client.start(bot_token=BOT_TOKEN)
-    
-    # Command handler for /all
-    @client.on(events.NewMessage(pattern='/all'))
-    async def all_handler(event):
-        if event.is_group:
-            all_users = []
-            offset_user = 0    # keep track of batch offset
-            limit_user = 200   # define the batch size
+@bot.on(events.NewMessage(pattern='/tagall'))
+async def tagall(event):
+    # Sirf groups me kaam karega
+    if event.is_group:
+        msg = await event.reply("🔄 Saare members ko mention kar raha hoon...")
+        
+        # Group ke saare members nikalna
+        members = await bot.get_participants(event.chat_id)
+        
+        # Mentions list banana
+        mentions = ""
+        count = 0
+        for user in members:
+            if not user.bot and not user.deleted:  # Sirf real users ko tag karega
+                mention = f"[{user.first_name}](tg://user?id={user.id})"
+                
+                # Ek message me 50 members tak mention karega (Telegram limit)
+                if count <= 50:
+                    mentions += mention + " "
+                    count += 1
+                else:
+                    await event.reply(mentions)
+                    mentions = mention + " "
+                    count = 1
+                    await asyncio.sleep(2)  # 2 second ka gap
+        
+        # Bache hue mentions bhejna
+        if mentions:
+            await event.reply(mentions)
+        
+        await msg.delete()
+    else:
+        await event.reply("⚠️ Ye command sirf groups me kaam karegi.")
 
-            while True:
-                participants = await client(GetParticipantsRequest(
-                    event.chat_id, ChannelParticipantsSearch(''),
-                    offset_user, limit_user, hash=0
-                ))
-                if not participants.users:
-                    break
-                all_users.extend([user.username or user.first_name for user in participants.users])
-                offset_user += len(participants.users)
+@bot.on(events.NewMessage(pattern='/start'))
+async def start(event):
+    await event.reply("👋 Main group mention bot hoon!\n/tagall se saare members ko tag kar sakte ho.")
 
-            # Splitting message if it's too long
-            MESSAGE_LIMIT = 4096
-            message = ''
-            for user in all_users:
-                mention = f'@{user} ' if user else ''
-                if len(message) + len(mention) + 1 > MESSAGE_LIMIT:
-                    await event.respond(message)
-                    message = ''
-                message += mention
-
-            if message:
-                await event.respond(message)
-    
-    print("Bot is running...")
-    await client.run_until_disconnected()
-
-if __name__ == "__main__":
-    asyncio.run(main())
+print("🤖 Bot chal raha hai...")
+bot.run_until_disconnected()
