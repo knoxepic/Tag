@@ -1,23 +1,53 @@
 from telethon import TelegramClient, events
 import asyncio
 import os
+import sys
 
-# API Details (Render environment variables se le sakte ho)
-API_ID = int(os.environ.get('API_ID', 1234567))  # Default value, Render me set karna
-API_HASH = os.environ.get('API_HASH', 'apna_api_hash')
-BOT_TOKEN = os.environ.get('BOT_TOKEN', 'apna_bot_token')
+# ==============================================
+# IMPORTANT: Environment Variables ya direct values
+# ==============================================
 
-# Global client variable
+# METHOD 1: Environment Variables se lena (Render me set karo)
+api_id = int(os.environ.get('API_ID', 0))
+api_hash = os.environ.get('API_HASH', '')
+bot_token = os.environ.get('BOT_TOKEN', '')
+
+# METHOD 2: Direct values dalo (Agar environment variables kaam nahi kar rahe)
+# API_ID = 28761567          # Apna actual ID
+# API_HASH = "b6320c0cc62a97d3a7d4e3055e6b9e0d"  # Apna actual hash
+# BOT_TOKEN = "7798323410:AAEr5G-_15rq1H1QTTz7sWjSpEaLzN_7tuU"  # Apna actual token
+
+# Check karo ki values hain ya nahi
+if api_id == 0 or not api_hash or not bot_token:
+    print("⚠️ Environment variables not found! Using direct values...")
+    # Yahan direct values dalo (comment hatao)
+    # api_id = API_ID
+    # api_hash = API_HASH
+    # bot_token = BOT_TOKEN
+
+print(f"🚀 Starting mention bot with Python {sys.version}")
+print(f"🔧 API_ID: {api_id}")
+print(f"🔧 API_HASH: {api_hash[:5]}...{api_hash[-5:] if len(api_hash) > 10 else ''}")
+print(f"🔧 BOT_TOKEN: {bot_token[:10]}...")
+
+# Global client
 client = None
 
-async def main():
+async def main_async():
+    """Async main function"""
     global client
     try:
-        # Client initialize with explicit loop
-        client = TelegramClient('bot', api_id, api_hash)
+        # Final check
+        if not api_id or not api_hash or not bot_token:
+            print("❌ API_ID, API_HASH, or BOT_TOKEN is missing!")
+            return
+        
+        print("🔄 Connecting to Telegram...")
+        client = TelegramClient('bot_session', api_id, api_hash)
         await client.start(bot_token=bot_token)
         
-        print("🤖 Bot successfully started!")
+        me = await client.get_me()
+        print(f"✅ Bot started: @{me.username} ({me.first_name})")
         
         @client.on(events.NewMessage(pattern='/start'))
         async def start_handler(event):
@@ -31,8 +61,6 @@ async def main():
             
             try:
                 msg = await event.reply("🔄 Saare members ko mention kar raha hoon...")
-                
-                # Group ke members nikalna
                 members = await client.get_participants(event.chat_id)
                 
                 mentions = ""
@@ -59,37 +87,30 @@ async def main():
             except Exception as e:
                 await event.reply(f"❌ Error: {str(e)}")
         
-        @client.on(events.NewMessage)
-        async def error_handler(event):
-            pass  # Ignore other messages
-        
-        # Client ko chalte rahne dena
+        print("✅ Bot is running. Press Ctrl+C to stop.")
         await client.run_until_disconnected()
         
     except Exception as e:
-        print(f"❌ Error in main: {e}")
+        print(f"❌ Error: {e}")
+        import traceback
+        traceback.print_exc()
     finally:
         if client:
             await client.disconnect()
 
-def run_bot():
-    """Bot ko start karne ka main function"""
+def main():
+    """Main function"""
     try:
-        # Python 3.7+ ke liye asyncio.run() use karo
-        asyncio.run(main())
-    except RuntimeError as e:
-        # Agar already event loop hai to alag tarike se handle karo
-        if 'already running' in str(e).lower():
-            loop = asyncio.get_event_loop()
-            loop.create_task(main())
-            loop.run_forever()
-        else:
-            print(f"❌ Runtime error: {e}")
+        asyncio.run(main_async())
     except KeyboardInterrupt:
         print("\n👋 Bot stopped by user")
     except Exception as e:
         print(f"❌ Unexpected error: {e}")
+        # Keep alive for Render
+        import time
+        time.sleep(5)
+        print("🔄 Restarting...")
+        main()
 
 if __name__ == "__main__":
-    print("🚀 Starting mention bot for Render...")
-    run_bot()
+    main()
