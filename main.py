@@ -88,7 +88,7 @@ def get_random_emoji():
 load_admins()
 
 # ==============================================
-# HTTP SERVER FOR RENDER
+# HTTP SERVER FOR RENDER (FIXED VERSION)
 # ==============================================
 
 class HealthCheckHandler(BaseHTTPRequestHandler):
@@ -96,16 +96,21 @@ class HealthCheckHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-        self.wfile.write(b'''
+        
+        # FIXED: Proper string encoding
+        html_content = f'''
         <html>
             <head><title>Mention Bot</title></head>
             <body style="font-family: Arial; text-align: center; padding: 50px;">
                 <h1>🤖 Telegram Mention Bot is Running!</h1>
                 <p>Bot is active and working...</p>
-                <p>Total Admins: ''' + str(len(ADMIN_IDS)).encode() + b'''</p>
+                <p>Total Admins: {len(ADMIN_IDS)}</p>
+                <p>Owner ID: {OWNER_ID}</p>
+                <p>Status: ✅ Online</p>
             </body>
         </html>
-        ''')
+        '''
+        self.wfile.write(html_content.encode())
     
     def log_message(self, format, *args):
         pass
@@ -134,8 +139,10 @@ async def send_mention(event, users, custom_text="", use_emoji=True):
     count = 0
     total = 0
     
+    bot_me = await client.get_me()
+    
     for user in users:
-        if not user.bot and not user.deleted and user.id != (await client.get_me()).id:
+        if not user.bot and not user.deleted and user.id != bot_me.id:
             if use_emoji:
                 emoji = get_random_emoji()
                 mention = f"[{emoji}](tg://user?id={user.id})"
@@ -349,10 +356,7 @@ async def online_handler(event):
         online_users = []
         for user in members:
             if not user.bot and not user.deleted:
-                if hasattr(user.status, 'was_online'):
-                    # Check if online recently
-                    online_users.append(user)
-                elif isinstance(user.status, UserStatusOnline):
+                if hasattr(user, 'status') and isinstance(user.status, UserStatusOnline):
                     online_users.append(user)
         
         if not online_users:
@@ -384,12 +388,14 @@ async def admins_handler(event):
         msg = await event.reply("🔄 Fetching admins...")
         chat = await event.get_chat()
         
-        if not chat.admin_rights and not chat.creator:
-            await event.reply("⚠️ I need to be admin to see admin list!")
-            return
-        
         members = await client.get_participants(event.chat_id)
-        admins = [user for user in members if user.admin_rights or user.id == chat.creator_id]
+        admins = []
+        
+        for user in members:
+            if hasattr(user, 'admin_rights') and user.admin_rights:
+                admins.append(user)
+            elif hasattr(chat, 'creator_id') and user.id == chat.creator_id:
+                admins.append(user)
         
         if not admins:
             await event.reply("No admins found!")
@@ -570,7 +576,6 @@ async def stats_handler(event):
 
 **📁 Groups:**
 • Total Groups: {len(groups)}
-• Active Now: Counting...
 
 **👥 Users:**
 • Total Users: {len(users)}
