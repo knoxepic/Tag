@@ -1,5 +1,6 @@
-from telethon import TelegramClient, events
+from telethon import TelegramClient, events, Button
 from telethon.tl.types import UserStatusOnline
+from telethon.utils import get_display_name
 import asyncio
 import os
 import sys
@@ -7,89 +8,64 @@ import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import random
 import re
+from datetime import datetime
+import json
+
+# Import languages
+from languages import *
 
 # ==============================================
-# CONFIGURATION - APNI VALUES DALEIN
+# CONFIGURATION
 # ==============================================
 api_id = int(os.environ.get('API_ID', 28761567))
 api_hash = os.environ.get('API_HASH', 'b6320c0cc62a97d3a7d4e3055e6b9e0d')
 bot_token = os.environ.get('BOT_TOKEN', '7798323410:AAEr5G-_15rq1H1QTTz7sWjSpEaLzN_7tuU')
 
-# ==============================================
-# IMPORTANT: APNI USER ID YAHAN DALEIN
-# ==============================================
-# @userinfobot se apni ID nikal kar yahan daalein
-OWNER_ID = 7957361876  # <-- YAHAN APNI ACTUAL USER ID DALEIN
-
-# Admin list - initially sirf aap
+OWNER_ID = 7957361876  # <-- APNI ID YAHAN DALEIN
 ADMIN_IDS = [OWNER_ID]
 
-# Emoji list for tagging
-EMOJIS = ["🔥", "⭐", "💫", "✨", "🌟", "💥", "⚡", "🎯", "🎪", "🎨", "🎭", "🎪", "🎢", "🎡", "🎠"]
+# User language preferences
+user_languages = {}
 
 # File for persistent storage
 ADMIN_FILE = "admins.txt"
 STOP_FILE = "stop.txt"
+LANG_FILE = "languages.json"
 
 # ==============================================
-# HELPER FUNCTIONS
+# LANGUAGE FUNCTIONS
 # ==============================================
 
-def load_admins():
-    global ADMIN_IDS
+def load_user_languages():
+    global user_languages
     try:
-        if os.path.exists(ADMIN_FILE):
-            with open(ADMIN_FILE, 'r') as f:
-                ids = f.read().strip().split(',')
-                if ids and ids[0]:
-                    ADMIN_IDS = [int(id) for id in ids if id]
+        if os.path.exists(LANG_FILE):
+            with open(LANG_FILE, 'r') as f:
+                user_languages = json.load(f)
     except:
-        pass
-    if OWNER_ID not in ADMIN_IDS:
-        ADMIN_IDS.append(OWNER_ID)
-        save_admins()
-    print(f"📂 Loaded admins: {ADMIN_IDS}")
+        user_languages = {}
 
-def save_admins():
+def save_user_languages():
     try:
-        with open(ADMIN_FILE, 'w') as f:
-            f.write(','.join(str(id) for id in ADMIN_IDS))
+        with open(LANG_FILE, 'w') as f:
+            json.dump(user_languages, f)
     except:
         pass
 
-def is_stopped(chat_id):
-    try:
-        if os.path.exists(STOP_FILE):
-            with open(STOP_FILE, 'r') as f:
-                stopped_chats = f.read().split(',')
-                return str(chat_id) in stopped_chats
-    except:
-        pass
-    return False
+def get_user_lang(user_id):
+    """Get user's selected language"""
+    return user_languages.get(str(user_id), 'en_in')  # Default English India
 
-def set_stop(chat_id, stop=True):
-    try:
-        stopped = []
-        if os.path.exists(STOP_FILE):
-            with open(STOP_FILE, 'r') as f:
-                stopped = f.read().split(',')
-        
-        chat_id_str = str(chat_id)
-        if stop and chat_id_str not in stopped:
-            stopped.append(chat_id_str)
-        elif not stop and chat_id_str in stopped:
-            stopped.remove(chat_id_str)
-        
-        with open(STOP_FILE, 'w') as f:
-            f.write(','.join(stopped))
-    except:
-        pass
+def get_text(user_id, key, **kwargs):
+    """Get text in user's language"""
+    lang_code = get_user_lang(user_id)
+    lang_dict = LANGUAGES.get(lang_code, LANGUAGES['en_in'])
+    text = lang_dict.get(key, LANGUAGES['en_in'].get(key, key))
+    return text.format(**kwargs)
 
-def get_random_emoji():
-    return random.choice(EMOJIS)
-
-# Load saved admins
+# Load saved data
 load_admins()
+load_user_languages()
 
 # ==============================================
 # HTTP SERVER FOR RENDER
@@ -109,6 +85,7 @@ class HealthCheckHandler(BaseHTTPRequestHandler):
                 <p>Bot is active and working...</p>
                 <p>Total Admins: {len(ADMIN_IDS)}</p>
                 <p>Owner ID: {OWNER_ID}</p>
+                <p>Languages: {len(LANGUAGES)}+</p>
                 <p>Status: ✅ Online</p>
             </body>
         </html>
@@ -133,49 +110,52 @@ http_thread.start()
 
 client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
 
-async def is_admin(user_id):
-    """Check if user is admin - FIXED VERSION"""
-    result = user_id in ADMIN_IDS
-    print(f"🔍 Admin check: User {user_id} is admin? {result} (Admin list: {ADMIN_IDS})")
-    return result
+# ==============================================
+# BUTTON FUNCTIONS
+# ==============================================
 
-async def send_mention(event, users, custom_text="", use_emoji=True):
-    """Send mentions with optional text and emoji"""
-    mentions = ""
-    count = 0
-    total = 0
+def get_main_menu_buttons(user_id):
+    """Get main menu buttons - 3 buttons per row"""
+    buttons = [
+        [Button.inline(get_text(user_id, 'support_btn'), b'support'),
+         Button.inline(get_text(user_id, 'add_btn'), b'add_group'),
+         Button.inline(get_text(user_id, 'settings_btn'), b'settings')],
+        [Button.inline(get_text(user_id, 'language_btn'), b'language'),
+         Button.inline(get_text(user_id, 'close_btn'), b'close')]
+    ]
+    return buttons
+
+def get_settings_buttons(user_id):
+    """Get settings menu buttons"""
+    buttons = [
+        [Button.inline(get_text(user_id, 'mention_settings'), b'settings_mention'),
+         Button.inline(get_text(user_id, 'admin_settings'), b'settings_admin')],
+        [Button.inline(get_text(user_id, 'group_settings'), b'settings_group'),
+         Button.inline(get_text(user_id, 'language_settings'), b'language')],
+        [Button.inline(get_text(user_id, 'back_btn'), b'main_menu')]
+    ]
+    return buttons
+
+def get_language_buttons(user_id):
+    """Get language selection buttons - 2 per row for better display"""
+    buttons = []
     
-    bot_me = await client.get_me()
+    # Top Telegram countries first
+    row = []
+    for lang_code, country, flag, desc in TOP_TELEGRAM_COUNTRIES[:6]:
+        lang_name = LANGUAGE_NAMES.get(lang_code, lang_code)
+        button_text = f"{flag} {lang_name}"
+        row.append(Button.inline(button_text, f'lang_{lang_code}'.encode()))
+        if len(row) == 2:
+            buttons.append(row)
+            row = []
+    if row:
+        buttons.append(row)
     
-    for user in users:
-        if not user.bot and not user.deleted and user.id != bot_me.id:
-            if use_emoji:
-                emoji = get_random_emoji()
-                mention = f"[{emoji}](tg://user?id={user.id})"
-            else:
-                mention = f"[‎](tg://user?id={user.id})"
-            
-            if count < 50:
-                mentions += mention + " "
-                count += 1
-                total += 1
-            else:
-                if custom_text:
-                    await event.reply(f"{custom_text}\n\n{mentions}")
-                else:
-                    await event.reply(mentions)
-                mentions = mention + " "
-                count = 1
-                total += 1
-                await asyncio.sleep(2)
+    # Other languages
+    buttons.append([Button.inline(get_text(user_id, 'back_btn'), b'main_menu')])
     
-    if mentions:
-        if custom_text:
-            await event.reply(f"{custom_text}\n\n{mentions}")
-        else:
-            await event.reply(mentions)
-    
-    return total
+    return buttons
 
 # ==============================================
 # BOT COMMANDS
@@ -183,192 +163,193 @@ async def send_mention(event, users, custom_text="", use_emoji=True):
 
 @client.on(events.NewMessage(pattern='/start'))
 async def start_handler(event):
-    """Welcome message"""
+    """Welcome message with buttons"""
     user_id = event.sender_id
-    is_admin_user = await is_admin(user_id)
+    is_admin_user = user_id in ADMIN_IDS
     
-    welcome_msg = f"""
-🌟 **Welcome to Mention Bot!** 🌟
+    status = get_text(user_id, 'admin_status') if is_admin_user else get_text(user_id, 'user_status')
+    
+    welcome_msg = (
+        f"{get_text(user_id, 'welcome_title')}\n\n"
+        f"👋 Hello {event.sender.first_name}!\n\n"
+        f"{get_text(user_id, 'your_info')}\n"
+        f"{get_text(user_id, 'user_id', user_id=user_id)}\n"
+        f"{get_text(user_id, 'status', status=status)}\n"
+        f"{get_text(user_id, 'owner', owner_id=OWNER_ID)}"
+    )
+    
+    buttons = get_main_menu_buttons(user_id)
+    await event.reply(welcome_msg, buttons=buttons)
 
-👋 Hello {event.sender.first_name}!
-
-**Your Information:**
-• Your ID: `{user_id}`
-• Status: {'👑 ADMIN' if is_admin_user else '👤 USER'}
-• Bot Owner: `{OWNER_ID}`
-
-**📋 Available Commands:**
-
-🔹 **For Everyone:**
-• `/help` - Show all commands
-• `/id` - Get your user ID
-• `/myid` - Apni ID dekhein
-
-🔹 **Mention Commands (Admin Only):**
-• `@all` - Mention all members
-• `@tagall` - Mention all members
-• `/tagall` - Mention all members
-• `/all` - Mention all members
-• `/hello [message]` - Mention with your message
-• `/online` - Mention online members only
-• `/admins` - Mention only admins
-
-🔹 **Admin Commands:**
-• `/addadmin [id]` - Naya admin add
-• `/removeadmin [id]` - Admin hatao
-• `/adminlist` - Admin list dekho
-• `/broadcast [msg]` - Sab groups mein message bhejo
-• `/stop` - Mentions band karo
-• `/resume` - Mentions resume karo
-• `/stats` - Bot statistics
-
-**📌 Note:** Bot ko group me admin banana zaroori hai!
-**🤖 Status:** Bot is active and working!
-"""
-    await event.reply(welcome_msg)
-
-@client.on(events.NewMessage(pattern='/help'))
-async def help_handler(event):
-    """Help command"""
+@client.on(events.CallbackQuery)
+async def callback_handler(event):
+    """Handle button clicks"""
     user_id = event.sender_id
-    is_admin_user = await is_admin(user_id)
+    data = event.data.decode()
     
-    help_text = f"""
-📚 **MENTION BOT COMMANDS**
-
-**👤 YOUR INFO:**
-━━━━━━━━━━━━━━━━
-• Your ID: `{user_id}`
-• Status: {'👑 ADMIN' if is_admin_user else '👤 USER'}
-• Owner ID: `{OWNER_ID}`
-
-**👤 USER COMMANDS:**
-━━━━━━━━━━━━━━━━
-• `/start` - Welcome message
-• `/help` - Show this help
-• `/id` or `/myid` - Show your user ID
-
-**👑 MENTION COMMANDS (Admin Only):**
-━━━━━━━━━━━━━━━━
-• `@all` - Mention everyone
-• `@tagall` - Mention everyone
-• `/tagall` - Mention everyone
-• `/all` - Mention everyone
-• `/hello [msg]` - Mention with custom message
-• `/online` - Mention online users only
-• `/admins` - Mention all admins
-
-**👑 ADMIN MANAGEMENT:**
-━━━━━━━━━━━━━━━━
-• `/addadmin [id]` - Add new admin
-• `/removeadmin [id]` - Remove admin
-• `/adminlist` - List all admins
-
-**👑 GROUP MANAGEMENT:**
-━━━━━━━━━━━━━━━━
-• `/broadcast [msg]` - Message all groups
-• `/stop` - Stop mentions in this group
-• `/resume` - Resume mentions
-• `/stats` - Bot statistics
-
-**✨ FEATURES:**
-━━━━━━━━━━━━━━━━
-• ✅ Auto detects group/user
-• ✅ Emoji based mentions
-• ✅ Online user detection
-• ✅ Admin only commands
-• ✅ Broadcast feature
-• ✅ Stop/Resume mentions
-"""
-    await event.reply(help_text)
-
-@client.on(events.NewMessage(pattern='/id'))
-@client.on(events.NewMessage(pattern='/myid'))
-async def id_handler(event):
-    """Show user ID"""
-    user_id = event.sender_id
-    chat = event.chat
-    chat_type = "Group" if event.is_group else "Private"
+    if data == 'support':
+        # Support group link
+        await event.answer("Opening support group...")
+        await event.edit(
+            "📞 **Support Group**\n\n"
+            "Join our support group for help:\n"
+            "https://t.me/vasukiempire",
+            buttons=[[Button.inline(get_text(user_id, 'back_btn'), b'main_menu')]]
+        )
     
-    await event.reply(f"""
-🆔 **Your Information**
-━━━━━━━━━━━━━━━━
-**User ID:** `{user_id}`
-**Username:** @{event.sender.username or 'N/A'}
-**First Name:** {event.sender.first_name}
-**Chat Type:** {chat_type}
-**Chat ID:** `{chat.id if event.is_group else 'Private'}`
-**Admin Status:** {'✅ Yes' if await is_admin(user_id) else '❌ No'}
-**Owner ID:** `{OWNER_ID}`
-""")
+    elif data == 'add_group':
+        # Add to group
+        await event.answer("Add me to your group!")
+        bot_username = (await client.get_me()).username
+        await event.edit(
+            f"➕ **Add Me to Your Group**\n\n"
+            f"1. Open this link:\n"
+            f"https://t.me/{bot_username}?startgroup=start\n\n"
+            f"2. Select your group\n"
+            f"3. Make me admin for full features",
+            buttons=[[Button.inline(get_text(user_id, 'back_btn'), b'main_menu')]]
+        )
+    
+    elif data == 'settings':
+        # Settings menu
+        await event.edit(
+            get_text(user_id, 'settings_title'),
+            buttons=get_settings_buttons(user_id)
+        )
+    
+    elif data == 'language':
+        # Language menu
+        await event.edit(
+            get_text(user_id, 'language_title'),
+            buttons=get_language_buttons(user_id)
+        )
+    
+    elif data == 'main_menu':
+        # Back to main menu
+        status = '👑 ADMIN' if user_id in ADMIN_IDS else '👤 USER'
+        await event.edit(
+            f"{get_text(user_id, 'welcome_title')}\n\n"
+            f"👋 Hello!\n\n"
+            f"{get_text(user_id, 'your_info')}\n"
+            f"{get_text(user_id, 'user_id', user_id=user_id)}\n"
+            f"{get_text(user_id, 'status', status=status)}",
+            buttons=get_main_menu_buttons(user_id)
+        )
+    
+    elif data == 'close':
+        # Close/delete message
+        await event.delete()
+    
+    elif data.startswith('lang_'):
+        # Change language
+        lang_code = data.replace('lang_', '')
+        user_languages[str(user_id)] = lang_code
+        save_user_languages()
+        
+        await event.answer(f"Language changed to {LANGUAGE_NAMES.get(lang_code, lang_code)}!")
+        
+        # Refresh menu in new language
+        status = '👑 ADMIN' if user_id in ADMIN_IDS else '👤 USER'
+        await event.edit(
+            f"{get_text(user_id, 'welcome_title')}\n\n"
+            f"👋 Hello {event.sender.first_name}!\n\n"
+            f"{get_text(user_id, 'your_info')}\n"
+            f"{get_text(user_id, 'user_id', user_id=user_id)}\n"
+            f"{get_text(user_id, 'status', status=status)}",
+            buttons=get_main_menu_buttons(user_id)
+        )
+    
+    elif data == 'settings_mention':
+        # Mention settings
+        await event.edit(
+            get_text(user_id, 'mention_settings_title'),
+            buttons=[[Button.inline(get_text(user_id, 'back_btn'), b'settings')]]
+        )
+    
+    elif data == 'settings_admin':
+        # Admin settings
+        admin_count = len(ADMIN_IDS)
+        await event.edit(
+            f"{get_text(user_id, 'admin_settings_title')}\n\n"
+            f"{get_text(user_id, 'total_admins', count=admin_count)}",
+            buttons=[[Button.inline(get_text(user_id, 'back_btn'), b'settings')]]
+        )
 
 # ==============================================
-# ALL MENTION COMMANDS - Ek hi handler mein sab
+# MENTION COMMANDS
 # ==============================================
-@client.on(events.NewMessage(pattern=r'^@all$|^@tagall$|^/tagall$|^/all$'))
-async def tagall_handler(event):
-    """Mention all members - Works with @all, @tagall, /tagall, /all"""
-    
-    # Debug info
-    print(f"📢 Command received: {event.message.text} from user {event.sender_id}")
+
+@client.on(events.NewMessage)
+async def mention_handler(event):
+    """Handle @all, @tagall, /tagall, /all"""
     
     if not event.is_group:
-        await event.reply("⚠️ Yeh command sirf groups mein kaam karti hai!")
+        return
+    
+    text = event.message.text.strip().lower()
+    
+    if text not in ['@all', '@tagall', '/tagall', '/all']:
         return
     
     user_id = event.sender_id
     
-    # Admin check with detailed debug
-    is_admin_user = await is_admin(user_id)
-    print(f"🔍 Admin check result: {is_admin_user}")
-    
-    if not is_admin_user:
-        await event.reply(
-            f"❌ Sirf admin log yeh command use kar sakte hain!\n\n"
-            f"**Your ID:** `{user_id}`\n"
-            f"**Admin IDs:** `{ADMIN_IDS}`\n"
-            f"**Owner ID:** `{OWNER_ID}`\n\n"
-            f"📌 **Solution:**\n"
-            f"1. `/myid` se apni ID check karein\n"
-            f"2. Agar aap owner hain to `OWNER_ID` code mein sahi daalein\n"
-            f"3. Ya kisi admin se `/addadmin {user_id}` karayein"
-        )
+    if user_id not in ADMIN_IDS:
+        await event.reply(get_text(user_id, 'admin_only'))
         return
     
     if is_stopped(event.chat_id):
-        await event.reply("⚠️ Mentions is group mein band hain. /resume se chalu karein.")
+        await event.reply(get_text(user_id, 'stopped'))
         return
     
     try:
-        msg = await event.reply("🔄 Members fetch kar raha hoon...")
+        msg = await event.reply("🔄 Fetching members...")
         members = await client.get_participants(event.chat_id)
         
-        total = await send_mention(event, members, use_emoji=True)
+        # Send mentions
+        mentions = ""
+        count = 0
+        total = 0
+        bot_me = await client.get_me()
+        
+        for user in members:
+            if not user.bot and not user.deleted and user.id != bot_me.id:
+                emoji = random.choice(["🔥", "⭐", "💫", "✨", "🌟"])
+                mention = f"[{emoji}](tg://user?id={user.id})"
+                
+                if count < 50:
+                    mentions += mention + " "
+                    count += 1
+                    total += 1
+                else:
+                    await event.reply(mentions)
+                    mentions = mention + " "
+                    count = 1
+                    total += 1
+                    await asyncio.sleep(2)
+        
+        if mentions:
+            await event.reply(mentions)
         
         await msg.delete()
-        await event.reply(f"✅ {total} members ko emoji ke saath mention kiya gaya!")
+        await event.reply(f"✅ {total} members mentioned!")
         
     except Exception as e:
         await event.reply(f"❌ Error: {str(e)}")
-
-# ==============================================
-# OTHER COMMANDS
-# ==============================================
 
 @client.on(events.NewMessage(pattern='/hello'))
 async def hello_handler(event):
     """Mention with custom message"""
     if not event.is_group:
-        await event.reply("⚠️ Yeh command sirf groups mein kaam karti hai!")
+        await event.reply(get_text(event.sender_id, 'group_only'))
         return
     
     user_id = event.sender_id
-    if not await is_admin(user_id):
-        await event.reply(f"❌ Sirf admin log yeh command use kar sakte hain!\nYour ID: `{user_id}`")
+    if user_id not in ADMIN_IDS:
+        await event.reply(get_text(user_id, 'admin_only'))
         return
     
     if is_stopped(event.chat_id):
-        await event.reply("⚠️ Mentions is group mein band hain. /resume se chalu karein.")
+        await event.reply(get_text(user_id, 'stopped'))
         return
     
     try:
@@ -376,35 +357,58 @@ async def hello_handler(event):
         if not custom_text:
             custom_text = "Hello everyone! 👋"
         
-        msg = await event.reply("🔄 Mentions prepare kar raha hoon...")
+        msg = await event.reply("🔄 Preparing mentions...")
         members = await client.get_participants(event.chat_id)
         
-        total = await send_mention(event, members, custom_text, use_emoji=True)
+        # Similar mention logic
+        mentions = ""
+        count = 0
+        total = 0
+        bot_me = await client.get_me()
+        
+        for user in members:
+            if not user.bot and not user.deleted and user.id != bot_me.id:
+                emoji = random.choice(["🔥", "⭐", "💫", "✨", "🌟"])
+                mention = f"[{emoji}](tg://user?id={user.id})"
+                
+                if count < 50:
+                    mentions += mention + " "
+                    count += 1
+                    total += 1
+                else:
+                    await event.reply(f"{custom_text}\n\n{mentions}")
+                    mentions = mention + " "
+                    count = 1
+                    total += 1
+                    await asyncio.sleep(2)
+        
+        if mentions:
+            await event.reply(f"{custom_text}\n\n{mentions}")
         
         await msg.delete()
-        await event.reply(f"✅ {total} members ko mention kiya: {custom_text}")
+        await event.reply(f"✅ {total} members mentioned!")
         
     except Exception as e:
         await event.reply(f"❌ Error: {str(e)}")
 
 @client.on(events.NewMessage(pattern='/online'))
 async def online_handler(event):
-    """Mention only online members"""
+    """Mention online members"""
     if not event.is_group:
-        await event.reply("⚠️ Yeh command sirf groups mein kaam karti hai!")
+        await event.reply(get_text(event.sender_id, 'group_only'))
         return
     
     user_id = event.sender_id
-    if not await is_admin(user_id):
-        await event.reply(f"❌ Sirf admin log yeh command use kar sakte hain!")
+    if user_id not in ADMIN_IDS:
+        await event.reply(get_text(user_id, 'admin_only'))
         return
     
     if is_stopped(event.chat_id):
-        await event.reply("⚠️ Mentions is group mein band hain. /resume se chalu karein.")
+        await event.reply(get_text(user_id, 'stopped'))
         return
     
     try:
-        msg = await event.reply("🔄 Online members dhundh raha hoon...")
+        msg = await event.reply("🔄 Finding online members...")
         members = await client.get_participants(event.chat_id)
         
         online_users = []
@@ -414,125 +418,140 @@ async def online_handler(event):
                     online_users.append(user)
         
         if not online_users:
-            await event.reply("😴 Koi online member nahi mila!")
+            await event.reply("😴 No online members found!")
             await msg.delete()
             return
         
-        total = await send_mention(event, online_users, "🟢 **Online Members:**", use_emoji=True)
+        # Send mentions for online users
+        mentions = ""
+        count = 0
+        total = 0
+        bot_me = await client.get_me()
+        
+        for user in online_users:
+            if user.id != bot_me.id:
+                emoji = "🟢"
+                mention = f"[{emoji}](tg://user?id={user.id})"
+                
+                if count < 50:
+                    mentions += mention + " "
+                    count += 1
+                    total += 1
+                else:
+                    await event.reply(f"🟢 **Online Members:**\n\n{mentions}")
+                    mentions = mention + " "
+                    count = 1
+                    total += 1
+                    await asyncio.sleep(2)
+        
+        if mentions:
+            await event.reply(f"🟢 **Online Members:**\n\n{mentions}")
         
         await msg.delete()
-        await event.reply(f"✅ {total} online members ko mention kiya!")
+        await event.reply(f"✅ {total} online members mentioned!")
         
     except Exception as e:
         await event.reply(f"❌ Error: {str(e)}")
 
-@client.on(events.NewMessage(pattern='/admins'))
-async def admins_handler(event):
-    """Mention only admins"""
-    if not event.is_group:
-        await event.reply("⚠️ Yeh command sirf groups mein kaam karti hai!")
-        return
-    
-    user_id = event.sender_id
-    if not await is_admin(user_id):
-        await event.reply(f"❌ Sirf admin log yeh command use kar sakte hain!")
-        return
-    
-    try:
-        msg = await event.reply("🔄 Admins dhundh raha hoon...")
-        members = await client.get_participants(event.chat_id)
-        
-        admins = []
-        chat = await event.get_chat()
-        
-        for user in members:
-            if not user.bot and not user.deleted:
-                if hasattr(user, 'admin_rights') and user.admin_rights:
-                    admins.append(user)
-                elif hasattr(chat, 'creator_id') and user.id == chat.creator_id:
-                    admins.append(user)
-        
-        if not admins:
-            await event.reply("Koi admin nahi mila!")
-            await msg.delete()
-            return
-        
-        total = await send_mention(event, admins, "👑 **Group Admins:**", use_emoji=True)
-        
-        await msg.delete()
-        await event.reply(f"✅ {total} admins ko mention kiya!")
-        
-    except Exception as e:
-        await event.reply(f"❌ Error: {str(e)}")
+# ==============================================
+# ADMIN MANAGEMENT
+# ==============================================
 
-@client.on(events.NewMessage(pattern='/addadmin'))
-async def addadmin_handler(event):
-    """Add new admin"""
+@client.on(events.NewMessage(pattern='/promote'))
+async def promote_handler(event):
+    """Promote user to admin"""
     user_id = event.sender_id
-    if not await is_admin(user_id):
-        await event.reply(f"❌ Sirf admin log naye admin add kar sakte hain!\nYour ID: `{user_id}`")
+    
+    if user_id not in ADMIN_IDS:
+        await event.reply(get_text(user_id, 'admin_only'))
         return
     
-    try:
+    # Get target user from reply or input
+    if event.message.reply_to_msg_id:
+        reply_msg = await event.get_reply_message()
+        target_id = reply_msg.sender_id
+    else:
         parts = event.message.text.split()
         if len(parts) < 2:
-            await event.reply("⚠️ Usage: `/addadmin [user_id]`\nExample: `/addadmin 123456789`")
+            await event.reply("⚠️ Usage: `/promote [id/@username]` or reply to message")
             return
         
-        new_admin_id = int(parts[1])
-        
-        if new_admin_id in ADMIN_IDS:
-            await event.reply(f"⚠️ User `{new_admin_id}` already admin hai!")
+        input_text = parts[1]
+        try:
+            if input_text.startswith('@'):
+                user = await client.get_entity(input_text)
+                target_id = user.id
+            else:
+                target_id = int(input_text)
+        except:
+            await event.reply(get_text(user_id, 'user_not_found'))
             return
-        
-        ADMIN_IDS.append(new_admin_id)
-        save_admins()
-        
-        await event.reply(f"✅ User `{new_admin_id}` ko admin bana diya gaya!\n\nTotal admins: {len(ADMIN_IDS)}\nAdmins: {ADMIN_IDS}")
-        
-    except ValueError:
-        await event.reply("❌ Invalid user ID! Sirf numbers daalein.")
-    except Exception as e:
-        await event.reply(f"❌ Error: {str(e)}")
-
-@client.on(events.NewMessage(pattern='/removeadmin'))
-async def removeadmin_handler(event):
-    """Remove admin"""
-    user_id = event.sender_id
-    if not await is_admin(user_id):
-        await event.reply("❌ Sirf admin log admin hata sakte hain!")
+    
+    if target_id in ADMIN_IDS:
+        await event.reply(get_text(user_id, 'already_admin'))
         return
     
-    try:
+    ADMIN_IDS.append(target_id)
+    save_admins()
+    
+    await event.reply(
+        f"{get_text(user_id, 'promoted')}\n\n"
+        f"User ID: `{target_id}`\n"
+        f"Total Admins: {len(ADMIN_IDS)}"
+    )
+
+@client.on(events.NewMessage(pattern='/demote'))
+async def demote_handler(event):
+    """Demote user from admin"""
+    user_id = event.sender_id
+    
+    if user_id not in ADMIN_IDS:
+        await event.reply(get_text(user_id, 'admin_only'))
+        return
+    
+    if event.message.reply_to_msg_id:
+        reply_msg = await event.get_reply_message()
+        target_id = reply_msg.sender_id
+    else:
         parts = event.message.text.split()
         if len(parts) < 2:
-            await event.reply("⚠️ Usage: `/removeadmin [user_id]`")
+            await event.reply("⚠️ Usage: `/demote [id/@username]` or reply to message")
             return
         
-        remove_id = int(parts[1])
-        
-        if remove_id == OWNER_ID:
-            await event.reply("❌ Owner ko nahi hata sakte!")
+        input_text = parts[1]
+        try:
+            if input_text.startswith('@'):
+                user = await client.get_entity(input_text)
+                target_id = user.id
+            else:
+                target_id = int(input_text)
+        except:
+            await event.reply(get_text(user_id, 'user_not_found'))
             return
-        
-        if remove_id not in ADMIN_IDS:
-            await event.reply(f"⚠️ User `{remove_id}` admin nahi hai!")
-            return
-        
-        ADMIN_IDS.remove(remove_id)
-        save_admins()
-        
-        await event.reply(f"✅ User `{remove_id}` ko admin se hata diya!\n\nTotal admins: {len(ADMIN_IDS)}")
-        
-    except Exception as e:
-        await event.reply(f"❌ Error: {str(e)}")
+    
+    if target_id == OWNER_ID:
+        await event.reply("❌ Cannot demote owner!")
+        return
+    
+    if target_id not in ADMIN_IDS:
+        await event.reply(get_text(user_id, 'not_admin'))
+        return
+    
+    ADMIN_IDS.remove(target_id)
+    save_admins()
+    
+    await event.reply(
+        f"{get_text(user_id, 'demoted')}\n\n"
+        f"User ID: `{target_id}`\n"
+        f"Total Admins: {len(ADMIN_IDS)}"
+    )
 
 @client.on(events.NewMessage(pattern='/adminlist'))
 async def adminlist_handler(event):
     """List all admins"""
     user_id = event.sender_id
     
-    admin_text = "👑 **Current Admins:**\n\n"
+    admin_text = "👑 **Admin List:**\n\n"
     
     for admin_id in ADMIN_IDS:
         try:
@@ -543,78 +562,89 @@ async def adminlist_handler(event):
         except:
             admin_text += f"• Unknown User - `{admin_id}`\n"
     
-    admin_text += f"\n**Total:** {len(ADMIN_IDS)} admins"
-    admin_text += f"\n**Owner:** `{OWNER_ID}`"
-    admin_text += f"\n**Your ID:** `{user_id}`"
-    admin_text += f"\n**Your Status:** {'✅ Admin' if await is_admin(user_id) else '❌ Not Admin'}"
+    admin_text += f"\nTotal: {len(ADMIN_IDS)} admins"
+    admin_text += f"\nOwner: `{OWNER_ID}`"
     
     await event.reply(admin_text)
+
+# ==============================================
+# BROADCAST COMMAND
+# ==============================================
 
 @client.on(events.NewMessage(pattern='/broadcast'))
 async def broadcast_handler(event):
     """Broadcast message to all groups"""
     user_id = event.sender_id
-    if not await is_admin(user_id):
-        await event.reply("❌ Sirf admin log broadcast use kar sakte hain!")
+    
+    if user_id not in ADMIN_IDS:
+        await event.reply(get_text(user_id, 'admin_only'))
         return
     
+    parts = event.message.text.split(maxsplit=1)
+    
+    if len(parts) < 2:
+        await event.reply(get_text(user_id, 'broadcast_usage'))
+        return
+    
+    broadcast_msg = parts[1].strip()
+    
+    if not broadcast_msg:
+        await event.reply(get_text(user_id, 'broadcast_usage'))
+        return
+    
+    progress = await event.reply(get_text(user_id, 'broadcast_start'))
+    
     try:
-        broadcast_msg = event.message.text.replace('/broadcast', '', 1).strip()
-        if not broadcast_msg:
-            await event.reply("⚠️ Message likhein!\nExample: `/broadcast Hello everyone!`")
-            return
-        
-        msg = await event.reply("📢 Sab groups mein broadcast kar raha hoon...")
-        
         dialogs = await client.get_dialogs()
-        groups = [dialog for dialog in dialogs if dialog.is_group]
+        groups = [d for d in dialogs if d.is_group or d.is_channel]
+        
+        if not groups:
+            await progress.edit("❌ No groups found!")
+            return
         
         success = 0
         failed = 0
         
-        for group in groups:
+        for i, group in enumerate(groups, 1):
             try:
-                await client.send_message(group.id, f"📢 **Broadcast Message**\n\n{broadcast_msg}")
+                await client.send_message(
+                    group.id,
+                    f"📢 **Broadcast Message**\n\n{broadcast_msg}"
+                )
                 success += 1
-                await asyncio.sleep(1)
+                
+                if i % 5 == 0:
+                    await progress.edit(
+                        f"{get_text(user_id, 'broadcast_start')}\n\n"
+                        f"Progress: {i}/{len(groups)}\n"
+                        f"Success: {success}\n"
+                        f"Failed: {failed}"
+                    )
+                
+                await asyncio.sleep(1.2)
+                
             except:
                 failed += 1
         
-        await msg.delete()
-        await event.reply(f"✅ Broadcast complete!\n\n📨 Sent to: {success} groups\n❌ Failed: {failed} groups")
+        await progress.edit(
+            f"{get_text(user_id, 'broadcast_done')}\n\n"
+            f"Total Groups: {len(groups)}\n"
+            f"✅ Success: {success}\n"
+            f"❌ Failed: {failed}"
+        )
         
     except Exception as e:
-        await event.reply(f"❌ Error: {str(e)}")
+        await progress.edit(f"❌ Error: {str(e)}")
 
-@client.on(events.NewMessage(pattern='/stop'))
-async def stop_handler(event):
-    """Stop mentions in this group"""
-    if not event.is_group:
-        await event.reply("⚠️ Yeh command sirf groups mein kaam karti hai!")
-        return
-    
-    user_id = event.sender_id
-    if not await is_admin(user_id):
-        await event.reply("❌ Sirf admin log mentions rok sakte hain!")
-        return
-    
-    set_stop(event.chat_id, True)
-    await event.reply("⏸️ Mentions is group mein band kar diye gaye. /resume se chalu karein.")
+# ==============================================
+# OTHER COMMANDS
+# ==============================================
 
-@client.on(events.NewMessage(pattern='/resume'))
-async def resume_handler(event):
-    """Resume mentions in this group"""
-    if not event.is_group:
-        await event.reply("⚠️ Yeh command sirf groups mein kaam karti hai!")
-        return
-    
+@client.on(events.NewMessage(pattern='/help'))
+async def help_handler(event):
+    """Help command"""
     user_id = event.sender_id
-    if not await is_admin(user_id):
-        await event.reply("❌ Sirf admin log mentions chalu kar sakte hain!")
-        return
-    
-    set_stop(event.chat_id, False)
-    await event.reply("▶️ Mentions is group mein chalu kar diye gaye!")
+    await event.reply(get_text(user_id, 'help_text'))
 
 @client.on(events.NewMessage(pattern='/stats'))
 async def stats_handler(event):
@@ -626,39 +656,110 @@ async def stats_handler(event):
         groups = [d for d in dialogs if d.is_group]
         users = [d for d in dialogs if d.is_user and not d.entity.bot]
         
-        stats_text = f"""
-📊 **Bot Statistics**
-
-**📁 Groups:**
-• Total Groups: {len(groups)}
-
-**👥 Users:**
-• Total Users: {len(users)}
-• Admins: {len(ADMIN_IDS)}
-
-**🤖 Bot Info:**
-• Uptime: Active
-• Version: 2.0
-• Owner: `{OWNER_ID}`
-
-**Your Status:**
-• ID: `{user_id}`
-• Admin: {'✅ Yes' if await is_admin(user_id) else '❌ No'}
-"""
+        stats_text = (
+            f"{get_text(user_id, 'stats_title')}\n\n"
+            f"{get_text(user_id, 'total_groups', count=len(groups))}\n"
+            f"{get_text(user_id, 'total_users', count=len(users))}\n"
+            f"{get_text(user_id, 'total_admins_stat', count=len(ADMIN_IDS))}\n"
+            f"{get_text(user_id, 'bot_version')}"
+        )
+        
         await event.reply(stats_text)
         
     except Exception as e:
         await event.reply(f"❌ Error: {str(e)}")
 
-@client.on(events.NewMessage)
-async def message_handler(event):
-    """Auto detect group/user"""
-    if event.is_group:
-        chat_title = event.chat.title if hasattr(event.chat, 'title') else "Unknown"
-        print(f"📢 Group message in: {chat_title} (ID: {event.chat_id})")
-    elif event.is_private:
-        user = event.sender
-        print(f"💬 Private message from: {user.first_name} (ID: {user.id})")
+@client.on(events.NewMessage(pattern='/ping'))
+async def ping_handler(event):
+    """Check bot status"""
+    start = datetime.now()
+    msg = await event.reply("🏓 **Pinging...**")
+    end = datetime.now()
+    ms = (end - start).microseconds / 1000
+    await msg.edit(f"🏓 **Pong!**\n**Response time:** `{ms}ms`")
+
+# ==============================================
+# STOP/RESUME
+# ==============================================
+
+def is_stopped(chat_id):
+    try:
+        if os.path.exists(STOP_FILE):
+            with open(STOP_FILE, 'r') as f:
+                stopped = f.read().split(',')
+                return str(chat_id) in stopped
+    except:
+        pass
+    return False
+
+def set_stop(chat_id, stop=True):
+    try:
+        stopped = []
+        if os.path.exists(STOP_FILE):
+            with open(STOP_FILE, 'r') as f:
+                stopped = f.read().split(',')
+        
+        chat_id_str = str(chat_id)
+        if stop and chat_id_str not in stopped:
+            stopped.append(chat_id_str)
+        elif not stop and chat_id_str in stopped:
+            stopped.remove(chat_id_str)
+        
+        with open(STOP_FILE, 'w') as f:
+            f.write(','.join(stopped))
+    except:
+        pass
+
+def load_admins():
+    global ADMIN_IDS
+    try:
+        if os.path.exists(ADMIN_FILE):
+            with open(ADMIN_FILE, 'r') as f:
+                ids = f.read().strip().split(',')
+                if ids and ids[0]:
+                    ADMIN_IDS = [int(id) for id in ids if id]
+    except:
+        pass
+    if OWNER_ID not in ADMIN_IDS:
+        ADMIN_IDS.append(OWNER_ID)
+        save_admins()
+
+def save_admins():
+    try:
+        with open(ADMIN_FILE, 'w') as f:
+            f.write(','.join(str(id) for id in ADMIN_IDS))
+    except:
+        pass
+
+@client.on(events.NewMessage(pattern='/stop'))
+async def stop_handler(event):
+    """Stop mentions in group"""
+    if not event.is_group:
+        await event.reply(get_text(event.sender_id, 'group_only'))
+        return
+    
+    user_id = event.sender_id
+    if user_id not in ADMIN_IDS:
+        await event.reply(get_text(user_id, 'admin_only'))
+        return
+    
+    set_stop(event.chat_id, True)
+    await event.reply("⏸️ Mentions stopped in this group. Use /resume to start again.")
+
+@client.on(events.NewMessage(pattern='/resume'))
+async def resume_handler(event):
+    """Resume mentions in group"""
+    if not event.is_group:
+        await event.reply(get_text(event.sender_id, 'group_only'))
+        return
+    
+    user_id = event.sender_id
+    if user_id not in ADMIN_IDS:
+        await event.reply(get_text(user_id, 'admin_only'))
+        return
+    
+    set_stop(event.chat_id, False)
+    await event.reply("▶️ Mentions resumed in this group!")
 
 # ==============================================
 # START BOT
@@ -667,6 +768,7 @@ async def message_handler(event):
 print("🚀 Starting Mention Bot...")
 print(f"👑 Owner ID: {OWNER_ID}")
 print(f"👑 Admins: {ADMIN_IDS}")
+print(f"🌐 Languages: {len(LANGUAGES)}+")
 print("✅ Bot is running! Press Ctrl+C to stop.")
 
 try:
