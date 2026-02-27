@@ -1,45 +1,31 @@
 # ==============================================
-# LANGUAGES FILE - 20+ Languages with Country Support
+# LANGUAGES FILE - 30+ Languages
+# India - 10 Languages + Top Telegram Countries
 # ==============================================
 
 # ==============================================
-# ASIA - Most Telegram Users
+# INDIA - 10 LANGUAGES
 # ==============================================
 
-# India - Hindi (Most Users)
+# 1. Hindi (हिंदी) - Most spoken in India
 HI = {
+    'name': 'हिंदी',
     'country': '🇮🇳 India',
-    'language': 'हिंदी',
-    'welcome_title': "🌟 **मेंशन बॉट में आपका स्वागत है!** 🌟",
+    'flag': '🇮🇳',
+    'welcome': "🌟 **मेंशन बॉट में आपका स्वागत है!** 🌟",
     'your_info': "**आपकी जानकारी:**",
     'user_id': "• आपकी ID: `{user_id}`",
     'status': "• स्थिति: {status}",
-    'owner': "• बॉट मालिक: `{owner_id}`",
     'admin_status': "👑 एडमिन",
     'user_status': "👤 यूजर",
+    'owner': "• बॉट मालिक: `{owner_id}`",
     'support_btn': "📞 सपोर्ट",
     'add_btn': "➕ ग्रुप में जोड़ें",
     'settings_btn': "⚙️ सेटिंग्स",
     'language_btn': "🌐 भाषा",
-    'back_btn': "🔙 वापस",
+    'commands_btn': "📋 कमांड्स",
     'close_btn': "❌ बंद करें",
-    'settings_title': "⚙️ **बॉट सेटिंग्स**",
-    'select_setting': "कोई विकल्प चुनें:",
-    'mention_settings': "📢 मेंशन सेटिंग्स",
-    'admin_settings': "👑 एडमिन सेटिंग्स",
-    'group_settings': "👥 ग्रुप सेटिंग्स",
-    'language_settings': "🌐 भाषा सेटिंग्स",
-    'mention_settings_title': "📢 **मेंशन सेटिंग्स**",
-    'emoji_on': "✅ इमोजी मेंशन: चालू",
-    'emoji_off': "❌ इमोजी मेंशन: बंद",
-    'mention_limit': "📊 मेंशन लिमिट: 50",
-    'mention_delay': "⏱️ देरी: 2 सेकंड",
-    'admin_settings_title': "👑 **एडमिन सेटिंग्स**",
-    'total_admins': "• कुल एडमिन: {count}",
-    'admin_list': "📋 एडमिन लिस्ट",
-    'add_admin': "➕ एडमिन जोड़ें",
-    'remove_admin': "➖ एडमिन हटाएं",
-    'language_title': "🌐 **भाषा चुनें**",
+    'back_btn': "🔙 वापस",
     'admin_only': "❌ केवल एडमिन इस कमांड का उपयोग कर सकते हैं!",
     'group_only': "⚠️ यह कमांड केवल ग्रुप में काम करती है!",
     'stopped': "⚠️ इस ग्रुप में मेंशन बंद हैं। /resume से चालू करें।",
@@ -54,63 +40,29 @@ HI = {
     'stats_title': "📊 **बॉट आंकड़े**",
     'total_groups': "• कुल ग्रुप: {count}",
     'total_users': "• कुल यूजर: {count}",
-    'total_admins_stat': "• कुल एडमिन: {count}",
-    'bot_version': "• वर्जन: 3.0",
-    'help_title': "📚 **मेंशन बॉट - मदद**",
-    'help_text': """
-**कमांड्स:**
-• `@all` - सभी को मेंशन करें
-• `/tagall` - सभी को मेंशन करें
-• `/hello [संदेश]` - संदेश के साथ मेंशन
-• `/online` - ऑनलाइन यूजर्स को मेंशन
-• `/admins` - एडमिन को मेंशन
-• `/random [संख्या]` - रैंडम मेंशन
-• `/hidetag` - छुपा कर मेंशन
-• `/broadcast [संदेश]` - ब्रॉडकास्ट (एडमिन)
-• `/promote` - एडमिन बनाएं (एडमिन)
-• `/demote` - एडमिन हटाएं (एडमिन)
-• `/adminlist` - एडमिन लिस्ट
-• `/stop` - मेंशन बंद करें (एडमिन)
-• `/resume` - मेंशन चालू करें (एडमिन)
-• `/stats` - आंकड़े
-• `/ping` - स्टेटस चेक
-    """
+    'total_admins': "• कुल एडमिन: {count}",
+    'bot_version': "• वर्जन: 5.0",
 }
 
-# India - English
+# 2. English (India)
 EN_IN = {
+    'name': 'English',
     'country': '🇮🇳 India',
-    'language': 'English',
-    'welcome_title': "🌟 **Welcome to Mention Bot!** 🌟",
+    'flag': '🇮🇳',
+    'welcome': "🌟 **Welcome to Mention Bot!** 🌟",
     'your_info': "**Your Information:**",
     'user_id': "• Your ID: `{user_id}`",
     'status': "• Status: {status}",
-    'owner': "• Bot Owner: `{owner_id}`",
     'admin_status': "👑 ADMIN",
     'user_status': "👤 USER",
+    'owner': "• Bot Owner: `{owner_id}`",
     'support_btn': "📞 Support",
     'add_btn': "➕ Add to Group",
     'settings_btn': "⚙️ Settings",
     'language_btn': "🌐 Language",
-    'back_btn': "🔙 Back",
+    'commands_btn': "📋 Commands",
     'close_btn': "❌ Close",
-    'settings_title': "⚙️ **Bot Settings**",
-    'select_setting': "Select an option:",
-    'mention_settings': "📢 Mention Settings",
-    'admin_settings': "👑 Admin Settings",
-    'group_settings': "👥 Group Settings",
-    'language_settings': "🌐 Language Settings",
-    'mention_settings_title': "📢 **Mention Settings**",
-    'emoji_on': "✅ Emoji Mentions: ON",
-    'emoji_off': "❌ Emoji Mentions: OFF",
-    'mention_limit': "📊 Mention Limit: 50",
-    'mention_delay': "⏱️ Delay: 2 seconds",
-    'admin_settings_title': "👑 **Admin Settings**",
-    'total_admins': "• Total Admins: {count}",
-    'admin_list': "📋 Admin List",
-    'add_admin': "➕ Add Admin",
-    'remove_admin': "➖ Remove Admin",
-    'language_title': "🌐 **Select Language**",
+    'back_btn': "🔙 Back",
     'admin_only': "❌ Only admins can use this command!",
     'group_only': "⚠️ This command only works in groups!",
     'stopped': "⚠️ Mentions are stopped in this group. Use /resume to start again.",
@@ -125,63 +77,329 @@ EN_IN = {
     'stats_title': "📊 **Bot Statistics**",
     'total_groups': "• Total Groups: {count}",
     'total_users': "• Total Users: {count}",
-    'total_admins_stat': "• Total Admins: {count}",
-    'bot_version': "• Version: 3.0",
-    'help_title': "📚 **Mention Bot - Help**",
-    'help_text': """
-**Commands:**
-• `@all` - Mention everyone
-• `/tagall` - Mention everyone
-• `/hello [msg]` - Mention with message
-• `/online` - Mention online users
-• `/admins` - Mention admins
-• `/random [n]` - Random mentions
-• `/hidetag` - Hide tag
-• `/broadcast [msg]` - Broadcast (Admin)
-• `/promote` - Promote user (Admin)
-• `/demote` - Demote user (Admin)
-• `/adminlist` - List admins
-• `/stop` - Stop mentions (Admin)
-• `/resume` - Resume mentions (Admin)
-• `/stats` - Bot stats
-• `/ping` - Check status
-    """
+    'total_admins': "• Total Admins: {count}",
+    'bot_version': "• Version: 5.0",
 }
 
-# Indonesia (2nd Largest Telegram Users)
+# 3. Bengali (বাংলা) - West Bengal, Bangladesh
+BN = {
+    'name': 'বাংলা',
+    'country': '🇮🇳 India / 🇧🇩 Bangladesh',
+    'flag': '🇮🇳',
+    'welcome': "🌟 **মেনশন বটে স্বাগতম!** 🌟",
+    'your_info': "**আপনার তথ্য:**",
+    'user_id': "• আপনার আইডি: `{user_id}`",
+    'status': "• অবস্থা: {status}",
+    'admin_status': "👑 অ্যাডমিন",
+    'user_status': "👤 ইউজার",
+    'owner': "• বট মালিক: `{owner_id}`",
+    'support_btn': "📞 সাপোর্ট",
+    'add_btn': "➕ গ্রুপে যোগ করুন",
+    'settings_btn': "⚙️ সেটিংস",
+    'language_btn': "🌐 ভাষা",
+    'commands_btn': "📋 কমান্ড",
+    'close_btn': "❌ বন্ধ করুন",
+    'back_btn': "🔙 ফিরে যান",
+    'admin_only': "❌ শুধুমাত্র অ্যাডমিন এই কমান্ড ব্যবহার করতে পারেন!",
+    'group_only': "⚠️ এই কমান্ড শুধুমাত্র গ্রুপে কাজ করে!",
+    'stopped': "⚠️ এই গ্রুপে মেনশন বন্ধ আছে। /resume দিয়ে চালু করুন।",
+    'user_not_found': "❌ ইউজার পাওয়া যায়নি!",
+    'promoted': "✅ **অ্যাডমিন করা হয়েছে!**",
+    'demoted': "✅ **অ্যাডমিন সরানো হয়েছে!**",
+    'already_admin': "⚠️ ইউজার ইতিমধ্যে অ্যাডমিন!",
+    'not_admin': "⚠️ ইউজার অ্যাডমিন নয়!",
+    'broadcast_start': "📢 **ব্রডকাস্ট শুরু...**",
+    'broadcast_done': "✅ **ব্রডকাস্ট সম্পূর্ণ!**",
+    'broadcast_usage': "⚠️ ব্যবহার: `/broadcast [বার্তা]`",
+    'stats_title': "📊 **বট পরিসংখ্যান**",
+    'total_groups': "• মোট গ্রুপ: {count}",
+    'total_users': "• মোট ইউজার: {count}",
+    'total_admins': "• মোট অ্যাডমিন: {count}",
+    'bot_version': "• সংস্করণ: 5.0",
+}
+
+# 4. Telugu (తెలుగు) - Andhra Pradesh, Telangana
+TE = {
+    'name': 'తెలుగు',
+    'country': '🇮🇳 India',
+    'flag': '🇮🇳',
+    'welcome': "🌟 **మెన్షన్ బాట్‌కు స్వాగతం!** 🌟",
+    'your_info': "**మీ సమాచారం:**",
+    'user_id': "• మీ ID: `{user_id}`",
+    'status': "• స్థితి: {status}",
+    'admin_status': "👑 అడ్మిన్",
+    'user_status': "👤 యూజర్",
+    'owner': "• బాట్ యజమాని: `{owner_id}`",
+    'support_btn': "📞 మద్దతు",
+    'add_btn': "➕ గ్రూప్‌లో చేర్చండి",
+    'settings_btn': "⚙️ సెట్టింగ్స్",
+    'language_btn': "🌐 భాష",
+    'commands_btn': "📋 కమాండ్స్",
+    'close_btn': "❌ మూసివేయి",
+    'back_btn': "🔙 వెనక్కి",
+    'admin_only': "❌ అడ్మిన్లు మాత్రమే ఈ కమాండ్ ఉపయోగించగలరు!",
+    'group_only': "⚠️ ఈ కమాండ్ గ్రూప్‌లో మాత్రమే పనిచేస్తుంది!",
+    'stopped': "⚠️ ఈ గ్రూప్‌లో మెన్షన్లు ఆపివేయబడ్డాయి. /resume తో మళ్లీ ప్రారంభించండి.",
+    'user_not_found': "❌ యూజర్ దొరకలేదు!",
+    'promoted': "✅ **అడ్మిన్ చేయబడింది!**",
+    'demoted': "✅ **అడ్మిన్ తొలగించబడింది!**",
+    'already_admin': "⚠️ యూజర్ ఇప్పటికే అడ్మిన్!",
+    'not_admin': "⚠️ యూజర్ అడ్మిన్ కాదు!",
+    'broadcast_start': "📢 **బ్రాడ్‌కాస్ట్ ప్రారంభం...**",
+    'broadcast_done': "✅ **బ్రాడ్‌కాస్ట్ పూర్తయింది!**",
+    'broadcast_usage': "⚠️ వాడకం: `/broadcast [సందేశం]`",
+    'stats_title': "📊 **బాట్ గణాంకాలు**",
+    'total_groups': "• మొత్తం గ్రూప్‌లు: {count}",
+    'total_users': "• మొత్తం యూజర్లు: {count}",
+    'total_admins': "• మొత్తం అడ్మిన్లు: {count}",
+    'bot_version': "• వెర్షన్: 5.0",
+}
+
+# 5. Marathi (मराठी) - Maharashtra
+MR = {
+    'name': 'मराठी',
+    'country': '🇮🇳 India',
+    'flag': '🇮🇳',
+    'welcome': "🌟 **मेंशन बॉटमध्ये आपले स्वागत आहे!** 🌟",
+    'your_info': "**आपली माहिती:**",
+    'user_id': "• आपली ID: `{user_id}`",
+    'status': "• स्थिती: {status}",
+    'admin_status': "👑 अ‍ॅडमिन",
+    'user_status': "👤 वापरकर्ता",
+    'owner': "• बॉट मालक: `{owner_id}`",
+    'support_btn': "📞 समर्थन",
+    'add_btn': "➕ ग्रुपमध्ये जोडा",
+    'settings_btn': "⚙️ सेटिंग्ज",
+    'language_btn': "🌐 भाषा",
+    'commands_btn': "📋 कमांड्स",
+    'close_btn': "❌ बंद करा",
+    'back_btn': "🔙 मागे",
+    'admin_only': "❌ फक्त अ‍ॅडमिन ही कमांड वापरू शकतात!",
+    'group_only': "⚠️ ही कमांड फक्त ग्रुपमध्ये काम करते!",
+    'stopped': "⚠️ या ग्रुपमध्ये मेंशन बंद केले आहेत. /resume ने सुरू करा.",
+    'user_not_found': "❌ वापरकर्ता सापडला नाही!",
+    'promoted': "✅ **अ‍ॅडमिन केले!**",
+    'demoted': "✅ **अ‍ॅडमिन काढले!**",
+    'already_admin': "⚠️ वापरकर्ता आधीच अ‍ॅडमिन आहे!",
+    'not_admin': "⚠️ वापरकर्ता अ‍ॅडमिन नाही!",
+    'broadcast_start': "📢 **ब्रॉडकास्ट सुरू...**",
+    'broadcast_done': "✅ **ब्रॉडकास्ट पूर्ण!**",
+    'broadcast_usage': "⚠️ वापर: `/broadcast [संदेश]`",
+    'stats_title': "📊 **बॉट आकडेवारी**",
+    'total_groups': "• एकूण ग्रुप: {count}",
+    'total_users': "• एकूण वापरकर्ते: {count}",
+    'total_admins': "• एकूण अ‍ॅडमिन: {count}",
+    'bot_version': "• आवृत्ती: 5.0",
+}
+
+# 6. Tamil (தமிழ்) - Tamil Nadu
+TA = {
+    'name': 'தமிழ்',
+    'country': '🇮🇳 India',
+    'flag': '🇮🇳',
+    'welcome': "🌟 **மென்ஷன் போட்டுக்கு வரவேற்கிறோம்!** 🌟",
+    'your_info': "**உங்கள் தகவல்:**",
+    'user_id': "• உங்கள் ID: `{user_id}`",
+    'status': "• நிலை: {status}",
+    'admin_status': "👑 நிர்வாகி",
+    'user_status': "👤 பயனர்",
+    'owner': "• போட் உரிமையாளர்: `{owner_id}`",
+    'support_btn': "📞 ஆதரவு",
+    'add_btn': "➕ குழுவில் சேர்க்க",
+    'settings_btn': "⚙️ அமைப்புகள்",
+    'language_btn': "🌐 மொழி",
+    'commands_btn': "📋 கட்டளைகள்",
+    'close_btn': "❌ மூடு",
+    'back_btn': "🔙 பின் செல்",
+    'admin_only': "❌ நிர்வாகிகள் மட்டுமே இந்த கட்டளையை பயன்படுத்த முடியும்!",
+    'group_only': "⚠️ இந்த கட்டளை குழுக்களில் மட்டுமே வேலை செய்யும்!",
+    'stopped': "⚠️ இந்த குழுவில் மென்ஷன்கள் நிறுத்தப்பட்டுள்ளன. /resume உடன் மீண்டும் தொடங்கவும்.",
+    'user_not_found': "❌ பயனர் கிடைக்கவில்லை!",
+    'promoted': "✅ **நிர்வாகி ஆக்கப்பட்டார்!**",
+    'demoted': "✅ **நிர்வாகி நீக்கப்பட்டார்!**",
+    'already_admin': "⚠️ பயனர் ஏற்கனவே நிர்வாகி!",
+    'not_admin': "⚠️ பயனர் நிர்வாகி இல்லை!",
+    'broadcast_start': "📢 **ஒளிபரப்பு தொடங்குகிறது...**",
+    'broadcast_done': "✅ **ஒளிபரப்பு முடிந்தது!**",
+    'broadcast_usage': "⚠️ பயன்பாடு: `/broadcast [செய்தி]`",
+    'stats_title': "📊 **போட் புள்ளிவிவரங்கள்**",
+    'total_groups': "• மொத்த குழுக்கள்: {count}",
+    'total_users': "• மொத்த பயனர்கள்: {count}",
+    'total_admins': "• மொத்த நிர்வாகிகள்: {count}",
+    'bot_version': "• பதிப்பு: 5.0",
+}
+
+# 7. Urdu (اردو) - North India
+UR = {
+    'name': 'اردو',
+    'country': '🇮🇳 India',
+    'flag': '🇮🇳',
+    'welcome': "🌟 **مینشن بوٹ میں خوش آمدید!** 🌟",
+    'your_info': "**آپ کی معلومات:**",
+    'user_id': "• آپ کی ID: `{user_id}`",
+    'status': "• حیثیت: {status}",
+    'admin_status': "👑 ایڈمن",
+    'user_status': "👤 صارف",
+    'owner': "• بوٹ مالک: `{owner_id}`",
+    'support_btn': "📞 سپورٹ",
+    'add_btn': "➕ گروپ میں شامل کریں",
+    'settings_btn': "⚙️ ترتیبات",
+    'language_btn': "🌐 زبان",
+    'commands_btn': "📋 کمانڈز",
+    'close_btn': "❌ بند کریں",
+    'back_btn': "🔙 واپس",
+    'admin_only': "❌ صرف ایڈمنز یہ کمانڈ استعمال کر سکتے ہیں!",
+    'group_only': "⚠️ یہ کمانڈ صرف گروپس میں کام کرتی ہے!",
+    'stopped': "⚠️ اس گروپ میں مینشن بند ہیں۔ /resume سے دوبارہ شروع کریں۔",
+    'user_not_found': "❌ صارف نہیں ملا!",
+    'promoted': "✅ **ایڈمن بنا دیا گیا!**",
+    'demoted': "✅ **ایڈمن ہٹا دیا گیا!**",
+    'already_admin': "⚠️ صارف پہلے ہی ایڈمن ہے!",
+    'not_admin': "⚠️ صارف ایڈمن نہیں ہے!",
+    'broadcast_start': "📢 **براڈکاسٹ شروع...**",
+    'broadcast_done': "✅ **براڈکاسٹ مکمل!**",
+    'broadcast_usage': "⚠️ استعمال: `/broadcast [پیغام]`",
+    'stats_title': "📊 **بوٹ کے اعدادوشمار**",
+    'total_groups': "• کل گروپس: {count}",
+    'total_users': "• کل صارفین: {count}",
+    'total_admins': "• کل ایڈمنز: {count}",
+    'bot_version': "• ورژن: 5.0",
+}
+
+# 8. Gujarati (ગુજરાતી) - Gujarat
+GU = {
+    'name': 'ગુજરાતી',
+    'country': '🇮🇳 India',
+    'flag': '🇮🇳',
+    'welcome': "🌟 **મેન્શન બોટમાં આપનું સ્વાગત છે!** 🌟",
+    'your_info': "**તમારી માહિતી:**",
+    'user_id': "• તમારો ID: `{user_id}`",
+    'status': "• સ્થિતિ: {status}",
+    'admin_status': "👑 એડમિન",
+    'user_status': "👤 યુઝર",
+    'owner': "• બોટ માલિક: `{owner_id}`",
+    'support_btn': "📞 સપોર્ટ",
+    'add_btn': "➕ ગ્રુપમાં ઉમેરો",
+    'settings_btn': "⚙️ સેટિંગ્સ",
+    'language_btn': "🌐 ભાષા",
+    'commands_btn': "📋 કમાન્ડ્સ",
+    'close_btn': "❌ બંધ કરો",
+    'back_btn': "🔙 પાછળ",
+    'admin_only': "❌ માત્ર એડમિન આ કમાન્ડ વાપરી શકે છે!",
+    'group_only': "⚠️ આ કમાન્ડ માત્ર ગ્રુપમાં કામ કરે છે!",
+    'stopped': "⚠️ આ ગ્રુપમાં મેન્શન બંધ છે. /resume થી શરૂ કરો.",
+    'user_not_found': "❌ યુઝર મળ્યો નહીં!",
+    'promoted': "✅ **એડમિન બનાવ્યો!**",
+    'demoted': "✅ **એડમિન હટાવ્યો!**",
+    'already_admin': "⚠️ યુઝર પહેલેથી એડમિન છે!",
+    'not_admin': "⚠️ યુઝર એડમિન નથી!",
+    'broadcast_start': "📢 **બ્રોડકાસ્ટ શરૂ...**",
+    'broadcast_done': "✅ **બ્રોડકાસ્ટ પૂર્ણ!**",
+    'broadcast_usage': "⚠️ ઉપયોગ: `/broadcast [સંદેશ]`",
+    'stats_title': "📊 **બોટ આંકડાઓ**",
+    'total_groups': "• કુલ ગ્રુપ: {count}",
+    'total_users': "• કુલ યુઝર: {count}",
+    'total_admins': "• કુલ એડમિન: {count}",
+    'bot_version': "• વર્ઝન: 5.0",
+}
+
+# 9. Kannada (ಕನ್ನಡ) - Karnataka
+KN = {
+    'name': 'ಕನ್ನಡ',
+    'country': '🇮🇳 India',
+    'flag': '🇮🇳',
+    'welcome': "🌟 **ಮೆನ್ಷನ್ ಬಾಟ್‌ಗೆ ಸುಸ್ವಾಗತ!** 🌟",
+    'your_info': "**ನಿಮ್ಮ ಮಾಹಿತಿ:**",
+    'user_id': "• ನಿಮ್ಮ ID: `{user_id}`",
+    'status': "• ಸ್ಥಿತಿ: {status}",
+    'admin_status': "👑 ಅಡ್ಮಿನ್",
+    'user_status': "👤 ಬಳಕೆದಾರ",
+    'owner': "• ಬಾಟ್ ಮಾಲೀಕ: `{owner_id}`",
+    'support_btn': "📞 ಬೆಂಬಲ",
+    'add_btn': "➕ ಗುಂಪಿಗೆ ಸೇರಿಸಿ",
+    'settings_btn': "⚙️ ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+    'language_btn': "🌐 ಭಾಷೆ",
+    'commands_btn': "📋 ಆಜ್ಞೆಗಳು",
+    'close_btn': "❌ ಮುಚ್ಚಿ",
+    'back_btn': "🔙 ಹಿಂದೆ",
+    'admin_only': "❌ ಅಡ್ಮಿನ್‌ಗಳು ಮಾತ್ರ ಈ ಆಜ್ಞೆಯನ್ನು ಬಳಸಬಹುದು!",
+    'group_only': "⚠️ ಈ ಆಜ್ಞೆ ಗುಂಪುಗಳಲ್ಲಿ ಮಾತ್ರ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ!",
+    'stopped': "⚠️ ಈ ಗುಂಪಿನಲ್ಲಿ ಮೆನ್ಷನ್‌ಗಳನ್ನು ನಿಲ್ಲಿಸಲಾಗಿದೆ. /resume ಬಳಸಿ ಮರುಪ್ರಾರಂಭಿಸಿ.",
+    'user_not_found': "❌ ಬಳಕೆದಾರ ಸಿಗಲಿಲ್ಲ!",
+    'promoted': "✅ **ಅಡ್ಮಿನ್ ಆಗಿ ಬಡ್ತಿ!**",
+    'demoted': "✅ **ಅಡ್ಮಿನ್ ನಿಂದ ಕೆಳಗಿಳಿಸಲಾಗಿದೆ!**",
+    'already_admin': "⚠️ ಬಳಕೆದಾರ ಈಗಾಗಲೇ ಅಡ್ಮಿನ್ ಆಗಿದ್ದಾರೆ!",
+    'not_admin': "⚠️ ಬಳಕೆದಾರ ಅಡ್ಮಿನ್ ಅಲ್ಲ!",
+    'broadcast_start': "📢 **ಪ್ರಸಾರ ಪ್ರಾರಂಭ...**",
+    'broadcast_done': "✅ **ಪ್ರಸಾರ ಪೂರ್ಣಗೊಂಡಿತು!**",
+    'broadcast_usage': "⚠️ ಬಳಕೆ: `/broadcast [ಸಂದೇಶ]`",
+    'stats_title': "📊 **ಬಾಟ್ ಅಂಕಿಅಂಶಗಳು**",
+    'total_groups': "• ಒಟ್ಟು ಗುಂಪುಗಳು: {count}",
+    'total_users': "• ಒಟ್ಟು ಬಳಕೆದಾರರು: {count}",
+    'total_admins': "• ಒಟ್ಟು ಅಡ್ಮಿನ್‌ಗಳು: {count}",
+    'bot_version': "• ಆವೃತ್ತಿ: 5.0",
+}
+
+# 10. Malayalam (മലയാളം) - Kerala
+ML = {
+    'name': 'മലയാളം',
+    'country': '🇮🇳 India',
+    'flag': '🇮🇳',
+    'welcome': "🌟 **മെൻഷൻ ബോട്ടിലേക്ക് സ്വാഗതം!** 🌟",
+    'your_info': "**നിങ്ങളുടെ വിവരങ്ങൾ:**",
+    'user_id': "• നിങ്ങളുടെ ID: `{user_id}`",
+    'status': "• നില: {status}",
+    'admin_status': "👑 അഡ്മിൻ",
+    'user_status': "👤 ഉപയോക്താവ്",
+    'owner': "• ബോട്ട് ഉടമ: `{owner_id}`",
+    'support_btn': "📞 പിന്തുണ",
+    'add_btn': "➕ ഗ്രൂപ്പിലേക്ക് ചേർക്കുക",
+    'settings_btn': "⚙️ ക്രമീകരണങ്ങൾ",
+    'language_btn': "🌐 ഭാഷ",
+    'commands_btn': "📋 കമാൻഡുകൾ",
+    'close_btn': "❌ അടയ്ക്കുക",
+    'back_btn': "🔙 പിന്നോട്ട്",
+    'admin_only': "❌ അഡ്മിൻമാർക്ക് മാത്രമേ ഈ കമാൻഡ് ഉപയോഗിക്കാൻ കഴിയൂ!",
+    'group_only': "⚠️ ഈ കമാൻഡ് ഗ്രൂപ്പുകളിൽ മാത്രമേ പ്രവർത്തിക്കൂ!",
+    'stopped': "⚠️ ഈ ഗ്രൂപ്പിൽ മെൻഷനുകൾ നിർത്തിവച്ചിരിക്കുന്നു. /resume ഉപയോഗിച്ച് വീണ്ടും ആരംഭിക്കുക.",
+    'user_not_found': "❌ ഉപയോക്താവിനെ കണ്ടെത്തിയില്ല!",
+    'promoted': "✅ **അഡ്മിൻ ആക്കി!**",
+    'demoted': "✅ **അഡ്മിൻ സ്ഥാനത്ത് നിന്ന് നീക്കി!**",
+    'already_admin': "⚠️ ഉപയോക്താവ് ഇതിനകം അഡ്മിൻ ആണ്!",
+    'not_admin': "⚠️ ഉപയോക്താവ് അഡ്മിൻ അല്ല!",
+    'broadcast_start': "📢 **ബ്രോഡ്കാസ്റ്റ് ആരംഭിക്കുന്നു...**",
+    'broadcast_done': "✅ **ബ്രോഡ്കാസ്റ്റ് പൂർത്തിയായി!**",
+    'broadcast_usage': "⚠️ ഉപയോഗം: `/broadcast [സന്ദേശം]`",
+    'stats_title': "📊 **ബോട്ട് സ്ഥിതിവിവരക്കണക്കുകൾ**",
+    'total_groups': "• ആകെ ഗ്രൂപ്പുകൾ: {count}",
+    'total_users': "• ആകെ ഉപയോക്താക്കൾ: {count}",
+    'total_admins': "• ആകെ അഡ്മിൻമാർ: {count}",
+    'bot_version': "• പതിപ്പ്: 5.0",
+}
+
+# ==============================================
+# TOP TELEGRAM COUNTRIES
+# ==============================================
+
+# 11. Indonesian (Bahasa Indonesia) - Indonesia
 ID = {
+    'name': 'Bahasa Indonesia',
     'country': '🇮🇩 Indonesia',
-    'language': 'Bahasa Indonesia',
-    'welcome_title': "🌟 **Selamat Datang di Mention Bot!** 🌟",
+    'flag': '🇮🇩',
+    'welcome': "🌟 **Selamat Datang di Mention Bot!** 🌟",
     'your_info': "**Informasi Anda:**",
     'user_id': "• ID Anda: `{user_id}`",
     'status': "• Status: {status}",
-    'owner': "• Pemilik Bot: `{owner_id}`",
     'admin_status': "👑 ADMIN",
     'user_status': "👤 PENGGUNA",
+    'owner': "• Pemilik Bot: `{owner_id}`",
     'support_btn': "📞 Dukungan",
     'add_btn': "➕ Tambah ke Grup",
     'settings_btn': "⚙️ Pengaturan",
     'language_btn': "🌐 Bahasa",
-    'back_btn': "🔙 Kembali",
+    'commands_btn': "📋 Perintah",
     'close_btn': "❌ Tutup",
-    'settings_title': "⚙️ **Pengaturan Bot**",
-    'select_setting': "Pilih opsi:",
-    'mention_settings': "📢 Pengaturan Mention",
-    'admin_settings': "👑 Pengaturan Admin",
-    'group_settings': "👥 Pengaturan Grup",
-    'language_settings': "🌐 Pengaturan Bahasa",
-    'mention_settings_title': "📢 **Pengaturan Mention**",
-    'emoji_on': "✅ Mention Emoji: AKTIF",
-    'emoji_off': "❌ Mention Emoji: NONAKTIF",
-    'mention_limit': "📊 Batas Mention: 50",
-    'mention_delay': "⏱️ Jeda: 2 detik",
-    'admin_settings_title': "👑 **Pengaturan Admin**",
-    'total_admins': "• Total Admin: {count}",
-    'admin_list': "📋 Daftar Admin",
-    'add_admin': "➕ Tambah Admin",
-    'remove_admin': "➖ Hapus Admin",
-    'language_title': "🌐 **Pilih Bahasa**",
+    'back_btn': "🔙 Kembali",
     'admin_only': "❌ Hanya admin yang bisa menggunakan perintah ini!",
     'group_only': "⚠️ Perintah ini hanya berfungsi di grup!",
     'stopped': "⚠️ Mention di grup ini dihentikan. Gunakan /resume untuk memulai lagi.",
@@ -190,69 +408,35 @@ ID = {
     'demoted': "✅ **Admin Diturunkan!**",
     'already_admin': "⚠️ Pengguna sudah menjadi admin!",
     'not_admin': "⚠️ Pengguna bukan admin!",
-    'broadcast_start': "📢 **Broadcast dimulai...**",
-    'broadcast_done': "✅ **Broadcast Selesai!**",
+    'broadcast_start': "📢 **Siaran dimulai...**",
+    'broadcast_done': "✅ **Siaran Selesai!**",
     'broadcast_usage': "⚠️ Penggunaan: `/broadcast [pesan]`",
     'stats_title': "📊 **Statistik Bot**",
     'total_groups': "• Total Grup: {count}",
     'total_users': "• Total Pengguna: {count}",
-    'total_admins_stat': "• Total Admin: {count}",
-    'bot_version': "• Versi: 3.0",
-    'help_title': "📚 **Bantuan Mention Bot**",
-    'help_text': """
-**Perintah:**
-• `@all` - Mention semua orang
-• `/tagall` - Mention semua orang
-• `/hello [pesan]` - Mention dengan pesan
-• `/online` - Mention pengguna online
-• `/admins` - Mention admin
-• `/random [n]` - Mention acak
-• `/hidetag` - Sembunyikan tag
-• `/broadcast [pesan]` - Broadcast (Admin)
-• `/promote` - Promosikan admin (Admin)
-• `/demote` - Turunkan admin (Admin)
-• `/adminlist` - Daftar admin
-• `/stop` - Hentikan mention (Admin)
-• `/resume` - Lanjutkan mention (Admin)
-• `/stats` - Statistik bot
-• `/ping` - Cek status
-    """
+    'total_admins': "• Total Admin: {count}",
+    'bot_version': "• Versi: 5.0",
 }
 
-# Malaysia
+# 12. Malay (Bahasa Melayu) - Malaysia
 MS = {
+    'name': 'Bahasa Melayu',
     'country': '🇲🇾 Malaysia',
-    'language': 'Bahasa Melayu',
-    'welcome_title': "🌟 **Selamat Datang ke Bot Mention!** 🌟",
+    'flag': '🇲🇾',
+    'welcome': "🌟 **Selamat Datang ke Mention Bot!** 🌟",
     'your_info': "**Maklumat Anda:**",
     'user_id': "• ID Anda: `{user_id}`",
     'status': "• Status: {status}",
-    'owner': "• Pemilik Bot: `{owner_id}`",
     'admin_status': "👑 ADMIN",
     'user_status': "👤 PENGGUNA",
+    'owner': "• Pemilik Bot: `{owner_id}`",
     'support_btn': "📞 Sokongan",
     'add_btn': "➕ Tambah ke Kumpulan",
     'settings_btn': "⚙️ Tetapan",
     'language_btn': "🌐 Bahasa",
-    'back_btn': "🔙 Kembali",
+    'commands_btn': "📋 Perintah",
     'close_btn': "❌ Tutup",
-    'settings_title': "⚙️ **Tetapan Bot**",
-    'select_setting': "Pilih pilihan:",
-    'mention_settings': "📢 Tetapan Mention",
-    'admin_settings': "👑 Tetapan Admin",
-    'group_settings': "👥 Tetapan Kumpulan",
-    'language_settings': "🌐 Tetapan Bahasa",
-    'mention_settings_title': "📢 **Tetapan Mention**",
-    'emoji_on': "✅ Mention Emoji: HIDUP",
-    'emoji_off': "❌ Mention Emoji: MATI",
-    'mention_limit': "📊 Had Mention: 50",
-    'mention_delay': "⏱️ Lengah: 2 saat",
-    'admin_settings_title': "👑 **Tetapan Admin**",
-    'total_admins': "• Jumlah Admin: {count}",
-    'admin_list': "📋 Senarai Admin",
-    'add_admin': "➕ Tambah Admin",
-    'remove_admin': "➖ Buang Admin",
-    'language_title': "🌐 **Pilih Bahasa**",
+    'back_btn': "🔙 Kembali",
     'admin_only': "❌ Hanya admin boleh menggunakan arahan ini!",
     'group_only': "⚠️ Arahan ini hanya berfungsi dalam kumpulan!",
     'stopped': "⚠️ Mention dalam kumpulan ini dihentikan. Gunakan /resume untuk mulakan semula.",
@@ -267,223 +451,29 @@ MS = {
     'stats_title': "📊 **Statistik Bot**",
     'total_groups': "• Jumlah Kumpulan: {count}",
     'total_users': "• Jumlah Pengguna: {count}",
-    'total_admins_stat': "• Jumlah Admin: {count}",
-    'bot_version': "• Versi: 3.0",
-    'help_title': "📚 **Bantuan Bot Mention**",
-    'help_text': """
-**Arahan:**
-• `@all` - Mention semua orang
-• `/tagall` - Mention semua orang
-• `/hello [mesej]` - Mention dengan mesej
-• `/online` - Mention pengguna online
-• `/admins` - Mention admin
-• `/random [n]` - Mention rawak
-• `/hidetag` - Sembunyi tag
-• `/broadcast [mesej]` - Siaran (Admin)
-• `/promote` - Naikkan admin (Admin)
-• `/demote` - Turunkan admin (Admin)
-• `/adminlist` - Senarai admin
-• `/stop` - Hentikan mention (Admin)
-• `/resume` - Sambung mention (Admin)
-• `/stats` - Statistik bot
-• `/ping` - Semak status
-    """
+    'total_admins': "• Jumlah Admin: {count}",
+    'bot_version': "• Versi: 5.0",
 }
 
-# ==============================================
-# MIDDLE EAST & ARABIC COUNTRIES
-# ==============================================
-
-# Saudi Arabia - Arabic
-AR_SA = {
-    'country': '🇸🇦 السعودية',
-    'language': 'العربية',
-    'welcome_title': "🌟 **مرحباً بك في بوت المنشن!** 🌟",
-    'your_info': "**معلوماتك:**",
-    'user_id': "• معرفك: `{user_id}`",
-    'status': "• الحالة: {status}",
-    'owner': "• مالك البوت: `{owner_id}`",
-    'admin_status': "👑 أدمن",
-    'user_status': "👤 مستخدم",
-    'support_btn': "📞 دعم",
-    'add_btn': "➕ أضف للمجموعة",
-    'settings_btn': "⚙️ إعدادات",
-    'language_btn': "🌐 اللغة",
-    'back_btn': "🔙 رجوع",
-    'close_btn': "❌ إغلاق",
-    'settings_title': "⚙️ **إعدادات البوت**",
-    'select_setting': "اختر خياراً:",
-    'mention_settings': "📢 إعدادات المنشن",
-    'admin_settings': "👑 إعدادات الأدمن",
-    'group_settings': "👥 إعدادات المجموعة",
-    'language_settings': "🌐 إعدادات اللغة",
-    'mention_settings_title': "📢 **إعدادات المنشن**",
-    'emoji_on': "✅ منشن بالإيموجي: مفعل",
-    'emoji_off': "❌ منشن بالإيموجي: معطل",
-    'mention_limit': "📊 حد المنشن: 50",
-    'mention_delay': "⏱️ تأخير: 2 ثانية",
-    'admin_settings_title': "👑 **إعدادات الأدمن**",
-    'total_admins': "• إجمالي الأدمن: {count}",
-    'admin_list': "📋 قائمة الأدمن",
-    'add_admin': "➕ إضافة أدمن",
-    'remove_admin': "➖ إزالة أدمن",
-    'language_title': "🌐 **اختر اللغة**",
-    'admin_only': "❌ الأدمن فقط يمكنهم استخدام هذا الأمر!",
-    'group_only': "⚠️ هذا الأمر يعمل فقط في المجموعات!",
-    'stopped': "⚠️ المنشن متوقف في هذه المجموعة. استخدم /resume للبدء مجدداً.",
-    'user_not_found': "❌ المستخدم غير موجود!",
-    'promoted': "✅ **تمت ترقية الأدمن!**",
-    'demoted': "✅ **تمت خفض رتبة الأدمن!**",
-    'already_admin': "⚠️ المستخدم أدمن بالفعل!",
-    'not_admin': "⚠️ المستخدم ليس أدمن!",
-    'broadcast_start': "📢 **بدء البث...**",
-    'broadcast_done': "✅ **اكتمل البث!**",
-    'broadcast_usage': "⚠️ الاستخدام: `/broadcast [رسالة]`",
-    'stats_title': "📊 **إحصائيات البوت**",
-    'total_groups': "• إجمالي المجموعات: {count}",
-    'total_users': "• إجمالي المستخدمين: {count}",
-    'total_admins_stat': "• إجمالي الأدمن: {count}",
-    'bot_version': "• الإصدار: 3.0",
-    'help_title': "📚 **مساعدة بوت المنشن**",
-    'help_text': """
-**الأوامر:**
-• `@all` - منشن الجميع
-• `/tagall` - منشن الجميع
-• `/hello [رسالة]` - منشن مع رسالة
-• `/online` - منشن المتصلين
-• `/admins` - منشن الأدمن
-• `/random [عدد]` - منشن عشوائي
-• `/hidetag` - إخفاء الوسم
-• `/broadcast [رسالة]` - بث (أدمن)
-• `/promote` - ترقية أدمن (أدمن)
-• `/demote` - خفض رتبة أدمن (أدمن)
-• `/adminlist` - قائمة الأدمن
-• `/stop` - إيقاف المنشن (أدمن)
-• `/resume` - استئناف المنشن (أدمن)
-• `/stats` - إحصائيات البوت
-• `/ping` - فحص الحالة
-    """
-}
-
-# Egypt
-AR_EG = {
-    'country': '🇪🇬 مصر',
-    'language': 'العربية',
-    # Same as Arabic but with Egyptian dialect variations
-    'welcome_title': "🌟 **مرحب بيك في بوت المنشن!** 🌟",
-    'your_info': "**معلوماتك:**",
-    'user_id': "• id بتاعك: `{user_id}`",
-    'status': "• الحالة: {status}",
-    'owner': "• صاحب البوت: `{owner_id}`",
-    'admin_status': "👑 أدمن",
-    'user_status': "👤 يوزر",
-    'support_btn': "📞 دعم",
-    'add_btn': "➕ ضيف للمجموعة",
-    'settings_btn': "⚙️ إعدادات",
-    'language_btn': "🌐 اللغة",
-    'back_btn': "🔙 رجوع",
-    'close_btn': "❌ قفل",
-    'settings_title': "⚙️ **إعدادات البوت**",
-    'select_setting': "اختار واحدة:",
-    'mention_settings': "📢 إعدادات المنشن",
-    'admin_settings': "👑 إعدادات الأدمن",
-    'group_settings': "👥 إعدادات المجموعة",
-    'language_settings': "🌐 إعدادات اللغة",
-    'mention_settings_title': "📢 **إعدادات المنشن**",
-    'emoji_on': "✅ منشن بالإيموجي: شغال",
-    'emoji_off': "❌ منشن بالإيموجي: موقف",
-    'mention_limit': "📊 حد المنشن: 50",
-    'mention_delay': "⏱️ تأخير: 2 ثانية",
-    'admin_settings_title': "👑 **إعدادات الأدمن**",
-    'total_admins': "• كل الأدمن: {count}",
-    'admin_list': "📋 لستة الأدمن",
-    'add_admin': "➕ زود أدمن",
-    'remove_admin': "➖ شيل أدمن",
-    'language_title': "🌐 **اختار اللغة**",
-    'admin_only': "❌ الأدمن بس هما اللي يقدر يستخدموا الأمر ده!",
-    'group_only': "⚠️ الأمر ده بيشتغل في المجموعات بس!",
-    'stopped': "⚠️ المنشن موقف في المجموعة دي. استخدم /resume عشان تشغله تاني.",
-    'user_not_found': "❌ اليوزر مش موجود!",
-    'promoted': "✅ **تمت الترقية!**",
-    'demoted': "✅ **تمت الخفض!**",
-    'already_admin': "⚠️ اليوزر أدمن بالفعل!",
-    'not_admin': "⚠️ اليوزر مش أدمن!",
-    'broadcast_start': "📢 **البث بدأ...**",
-    'broadcast_done': "✅ **البث خلص!**",
-    'broadcast_usage': "⚠️ استخدم كده: `/broadcast [رسالة]`",
-    'stats_title': "📊 **إحصائيات البوت**",
-    'total_groups': "• كل المجموعات: {count}",
-    'total_users': "• كل اليوزر: {count}",
-    'total_admins_stat': "• كل الأدمن: {count}",
-    'bot_version': "• الإصدار: 3.0",
-    'help_title': "📚 **مساعدة بوت المنشن**",
-    'help_text': """
-**الأوامر:**
-• `@all` - منشن الكل
-• `/tagall` - منشن الكل
-• `/hello [رسالة]` - منشن مع رسالة
-• `/online` - منشن اللي موجودين
-• `/admins` - منشن الأدمن
-• `/random [عدد]` - منشن عشوائي
-• `/hidetag` - اخفي الوسم
-• `/broadcast [رسالة]` - بث (أدمن)
-• `/promote` - ترقية أدمن (أدمن)
-• `/demote` - خفض أدمن (أدمن)
-• `/adminlist` - لستة الأدمن
-• `/stop` - وقف المنشن (أدمن)
-• `/resume` - تشغيل المنشن (أدمن)
-• `/stats` - إحصائيات البوت
-• `/ping` - فحص الحالة
-    """
-}
-
-# UAE
-AR_AE = {
-    'country': '🇦🇪 الإمارات',
-    'language': 'العربية',
-    # Similar to Arabic but with UAE dialect
-    'welcome_title': "🌟 **مرحبا بك في بوت المنشن!** 🌟",
-    # (Similar to AR_SA with minor variations)
-}
-
-# ==============================================
-# RUSSIA & CIS COUNTRIES
-# ==============================================
-
-# Russia
+# 13. Russian (Русский) - Russia
 RU = {
-    'country': '🇷🇺 Россия',
-    'language': 'Русский',
-    'welcome_title': "🌟 **Добро пожаловать в Mention Bot!** 🌟",
+    'name': 'Русский',
+    'country': '🇷🇺 Russia',
+    'flag': '🇷🇺',
+    'welcome': "🌟 **Добро пожаловать в Mention Bot!** 🌟",
     'your_info': "**Ваша информация:**",
     'user_id': "• Ваш ID: `{user_id}`",
     'status': "• Статус: {status}",
-    'owner': "• Владелец бота: `{owner_id}`",
     'admin_status': "👑 АДМИН",
     'user_status': "👤 ПОЛЬЗОВАТЕЛЬ",
+    'owner': "• Владелец бота: `{owner_id}`",
     'support_btn': "📞 Поддержка",
     'add_btn': "➕ Добавить в группу",
     'settings_btn': "⚙️ Настройки",
     'language_btn': "🌐 Язык",
-    'back_btn': "🔙 Назад",
+    'commands_btn': "📋 Команды",
     'close_btn': "❌ Закрыть",
-    'settings_title': "⚙️ **Настройки бота**",
-    'select_setting': "Выберите опцию:",
-    'mention_settings': "📢 Настройки упоминаний",
-    'admin_settings': "👑 Настройки админов",
-    'group_settings': "👥 Настройки группы",
-    'language_settings': "🌐 Настройки языка",
-    'mention_settings_title': "📢 **Настройки упоминаний**",
-    'emoji_on': "✅ Упоминания с эмодзи: ВКЛ",
-    'emoji_off': "❌ Упоминания с эмодзи: ВЫКЛ",
-    'mention_limit': "📊 Лимит упоминаний: 50",
-    'mention_delay': "⏱️ Задержка: 2 секунды",
-    'admin_settings_title': "👑 **Настройки админов**",
-    'total_admins': "• Всего админов: {count}",
-    'admin_list': "📋 Список админов",
-    'add_admin': "➕ Добавить админа",
-    'remove_admin': "➖ Удалить админа",
-    'language_title': "🌐 **Выберите язык**",
+    'back_btn': "🔙 Назад",
     'admin_only': "❌ Только админы могут использовать эту команду!",
     'group_only': "⚠️ Эта команда работает только в группах!",
     'stopped': "⚠️ Упоминания остановлены в этой группе. Используйте /resume для возобновления.",
@@ -498,199 +488,66 @@ RU = {
     'stats_title': "📊 **Статистика бота**",
     'total_groups': "• Всего групп: {count}",
     'total_users': "• Всего пользователей: {count}",
-    'total_admins_stat': "• Всего админов: {count}",
-    'bot_version': "• Версия: 3.0",
-    'help_title': "📚 **Помощь Mention Bot**",
-    'help_text': """
-**Команды:**
-• `@all` - Упомянуть всех
-• `/tagall` - Упомянуть всех
-• `/hello [сообщение]` - Упомянуть с сообщением
-• `/online` - Упомянуть онлайн
-• `/admins` - Упомянуть админов
-• `/random [n]` - Случайные упоминания
-• `/hidetag` - Скрыть тег
-• `/broadcast [сообщение]` - Рассылка (Админ)
-• `/promote` - Назначить админа (Админ)
-• `/demote` - Удалить админа (Админ)
-• `/adminlist` - Список админов
-• `/stop` - Остановить упоминания (Админ)
-• `/resume` - Возобновить упоминания (Админ)
-• `/stats` - Статистика бота
-• `/ping` - Проверить статус
-    """
+    'total_admins': "• Всего админов: {count}",
+    'bot_version': "• Версия: 5.0",
 }
 
-# Ukraine
-UK = {
-    'country': '🇺🇦 Україна',
-    'language': 'Українська',
-    # Similar to Russian but Ukrainian
+# 14. Arabic (العربية) - Egypt, Saudi Arabia, UAE
+AR = {
+    'name': 'العربية',
+    'country': '🇪🇬 Egypt / 🇸🇦 Saudi Arabia',
+    'flag': '🇪🇬',
+    'welcome': "🌟 **مرحباً بك في بوت المنشن!** 🌟",
+    'your_info': "**معلوماتك:**",
+    'user_id': "• معرفك: `{user_id}`",
+    'status': "• الحالة: {status}",
+    'admin_status': "👑 أدمن",
+    'user_status': "👤 مستخدم",
+    'owner': "• مالك البوت: `{owner_id}`",
+    'support_btn': "📞 دعم",
+    'add_btn': "➕ أضف للمجموعة",
+    'settings_btn': "⚙️ إعدادات",
+    'language_btn': "🌐 اللغة",
+    'commands_btn': "📋 الأوامر",
+    'close_btn': "❌ إغلاق",
+    'back_btn': "🔙 رجوع",
+    'admin_only': "❌ الأدمن فقط يمكنهم استخدام هذا الأمر!",
+    'group_only': "⚠️ هذا الأمر يعمل فقط في المجموعات!",
+    'stopped': "⚠️ المنشن متوقف في هذه المجموعة. استخدم /resume للبدء مجدداً.",
+    'user_not_found': "❌ المستخدم غير موجود!",
+    'promoted': "✅ **تمت الترقية!**",
+    'demoted': "✅ **تمت الخفض!**",
+    'already_admin': "⚠️ المستخدم أدمن بالفعل!",
+    'not_admin': "⚠️ المستخدم ليس أدمن!",
+    'broadcast_start': "📢 **بدء البث...**",
+    'broadcast_done': "✅ **اكتمل البث!**",
+    'broadcast_usage': "⚠️ الاستخدام: `/broadcast [رسالة]`",
+    'stats_title': "📊 **إحصائيات البوت**",
+    'total_groups': "• إجمالي المجموعات: {count}",
+    'total_users': "• إجمالي المستخدمين: {count}",
+    'total_admins': "• إجمالي الأدمن: {count}",
+    'bot_version': "• الإصدار: 5.0",
 }
 
-# Kazakhstan
-KK = {
-    'country': '🇰🇿 Қазақстан',
-    'language': 'Қазақша',
-    # Kazakh language
-}
-
-# ==============================================
-# EUROPE
-# ==============================================
-
-# United Kingdom
-EN_GB = {
-    'country': '🇬🇧 United Kingdom',
-    'language': 'English',
-    # Similar to EN_IN
-}
-
-# Germany
-DE = {
-    'country': '🇩🇪 Deutschland',
-    'language': 'Deutsch',
-    'welcome_title': "🌟 **Willkommen beim Mention Bot!** 🌟",
-    'your_info': "**Ihre Informationen:**",
-    'user_id': "• Ihre ID: `{user_id}`",
-    'status': "• Status: {status}",
-    'owner': "• Bot-Besitzer: `{owner_id}`",
-    'admin_status': "👑 ADMIN",
-    'user_status': "👤 BENUTZER",
-    'support_btn': "📞 Support",
-    'add_btn': "➕ Zur Gruppe hinzufügen",
-    'settings_btn': "⚙️ Einstellungen",
-    'language_btn': "🌐 Sprache",
-    'back_btn': "🔙 Zurück",
-    'close_btn': "❌ Schließen",
-    'settings_title': "⚙️ **Bot-Einstellungen**",
-    'select_setting': "Wählen Sie eine Option:",
-    'mention_settings': "📢 Erwähnungseinstellungen",
-    'admin_settings': "👑 Admin-Einstellungen",
-    'group_settings': "👥 Gruppeneinstellungen",
-    'language_settings': "🌐 Spracheinstellungen",
-    'mention_settings_title': "📢 **Erwähnungseinstellungen**",
-    'emoji_on': "✅ Emoji-Erwähnungen: AN",
-    'emoji_off': "❌ Emoji-Erwähnungen: AUS",
-    'mention_limit': "📊 Erwähnungslimit: 50",
-    'mention_delay': "⏱️ Verzögerung: 2 Sekunden",
-    'admin_settings_title': "👑 **Admin-Einstellungen**",
-    'total_admins': "• Admins insgesamt: {count}",
-    'admin_list': "📋 Admin-Liste",
-    'add_admin': "➕ Admin hinzufügen",
-    'remove_admin': "➖ Admin entfernen",
-    'language_title': "🌐 **Sprache auswählen**",
-    'admin_only': "❌ Nur Admins können diesen Befehl verwenden!",
-    'group_only': "⚠️ Dieser Befehl funktioniert nur in Gruppen!",
-    'stopped': "⚠️ Erwähnungen in dieser Gruppe gestoppt. Verwenden Sie /resume zum Neustarten.",
-    'user_not_found': "❌ Benutzer nicht gefunden!",
-    'promoted': "✅ **Admin befördert!**",
-    'demoted': "✅ **Admin degradiert!**",
-    'already_admin': "⚠️ Benutzer ist bereits Admin!",
-    'not_admin': "⚠️ Benutzer ist kein Admin!",
-    'broadcast_start': "📢 **Rundsendung startet...**",
-    'broadcast_done': "✅ **Rundsendung abgeschlossen!**",
-    'broadcast_usage': "⚠️ Verwendung: `/broadcast [Nachricht]`",
-    'stats_title': "📊 **Bot-Statistiken**",
-    'total_groups': "• Gruppen insgesamt: {count}",
-    'total_users': "• Benutzer insgesamt: {count}",
-    'total_admins_stat': "• Admins insgesamt: {count}",
-    'bot_version': "• Version: 3.0",
-    'help_title': "📚 **Mention Bot Hilfe**",
-    'help_text': """
-**Befehle:**
-• `@all` - Alle erwähnen
-• `/tagall` - Alle erwähnen
-• `/hello [Nachricht]` - Mit Nachricht erwähnen
-• `/online` - Online-Benutzer erwähnen
-• `/admins` - Admins erwähnen
-• `/random [n]` - Zufällige Erwähnungen
-• `/hidetag` - Tag verstecken
-• `/broadcast [Nachricht]` - Rundsendung (Admin)
-• `/promote` - Admin befördern (Admin)
-• `/demote` - Admin degradieren (Admin)
-• `/adminlist` - Admin-Liste
-• `/stop` - Erwähnungen stoppen (Admin)
-• `/resume` - Erwähnungen fortsetzen (Admin)
-• `/stats` - Bot-Statistiken
-• `/ping` - Status prüfen
-    """
-}
-
-# France
-FR = {
-    'country': '🇫🇷 France',
-    'language': 'Français',
-    'welcome_title': "🌟 **Bienvenue sur Mention Bot!** 🌟",
-    # French translations
-}
-
-# Italy
-IT = {
-    'country': '🇮🇹 Italia',
-    'language': 'Italiano',
-    # Italian translations
-}
-
-# Spain
-ES = {
-    'country': '🇪🇸 España',
-    'language': 'Español',
-    # Spanish translations
-}
-
-# Netherlands
-NL = {
-    'country': '🇳🇱 Nederland',
-    'language': 'Nederlands',
-    # Dutch translations
-}
-
-# Poland
-PL = {
-    'country': '🇵🇱 Polska',
-    'language': 'Polski',
-    # Polish translations
-}
-
-# ==============================================
-# SOUTH AMERICA
-# ==============================================
-
-# Brazil
+# 15. Portuguese (Português) - Brazil
 PT_BR = {
-    'country': '🇧🇷 Brasil',
-    'language': 'Português',
-    'welcome_title': "🌟 **Bem-vindo ao Mention Bot!** 🌟",
+    'name': 'Português',
+    'country': '🇧🇷 Brazil',
+    'flag': '🇧🇷',
+    'welcome': "🌟 **Bem-vindo ao Mention Bot!** 🌟",
     'your_info': "**Suas informações:**",
     'user_id': "• Seu ID: `{user_id}`",
     'status': "• Status: {status}",
-    'owner': "• Dono do Bot: `{owner_id}`",
     'admin_status': "👑 ADMIN",
     'user_status': "👤 USUÁRIO",
+    'owner': "• Dono do Bot: `{owner_id}`",
     'support_btn': "📞 Suporte",
     'add_btn': "➕ Adicionar ao Grupo",
     'settings_btn': "⚙️ Configurações",
     'language_btn': "🌐 Idioma",
-    'back_btn': "🔙 Voltar",
+    'commands_btn': "📋 Comandos",
     'close_btn': "❌ Fechar",
-    'settings_title': "⚙️ **Configurações do Bot**",
-    'select_setting': "Selecione uma opção:",
-    'mention_settings': "📢 Configurações de Menção",
-    'admin_settings': "👑 Configurações de Admin",
-    'group_settings': "👥 Configurações do Grupo",
-    'language_settings': "🌐 Configurações de Idioma",
-    'mention_settings_title': "📢 **Configurações de Menção**",
-    'emoji_on': "✅ Menções com Emoji: LIGADO",
-    'emoji_off': "❌ Menções com Emoji: DESLIGADO",
-    'mention_limit': "📊 Limite de Menções: 50",
-    'mention_delay': "⏱️ Atraso: 2 segundos",
-    'admin_settings_title': "👑 **Configurações de Admin**",
-    'total_admins': "• Total de Admins: {count}",
-    'admin_list': "📋 Lista de Admins",
-    'add_admin': "➕ Adicionar Admin",
-    'remove_admin': "➖ Remover Admin",
-    'language_title': "🌐 **Selecione o Idioma**",
+    'back_btn': "🔙 Voltar",
     'admin_only': "❌ Apenas admins podem usar este comando!",
     'group_only': "⚠️ Este comando só funciona em grupos!",
     'stopped': "⚠️ Menções paradas neste grupo. Use /resume para reiniciar.",
@@ -705,124 +562,193 @@ PT_BR = {
     'stats_title': "📊 **Estatísticas do Bot**",
     'total_groups': "• Total de Grupos: {count}",
     'total_users': "• Total de Usuários: {count}",
-    'total_admins_stat': "• Total de Admins: {count}",
-    'bot_version': "• Versão: 3.0",
-    'help_title': "📚 **Ajuda do Mention Bot**",
-    'help_text': """
-**Comandos:**
-• `@all` - Mencionar todos
-• `/tagall` - Mencionar todos
-• `/hello [msg]` - Mencionar com mensagem
-• `/online` - Mencionar usuários online
-• `/admins` - Mencionar admins
-• `/random [n]` - Menções aleatórias
-• `/hidetag` - Ocultar tag
-• `/broadcast [msg]` - Transmissão (Admin)
-• `/promote` - Promover admin (Admin)
-• `/demote` - Rebaixar admin (Admin)
-• `/adminlist` - Lista de admins
-• `/stop` - Parar menções (Admin)
-• `/resume` - Retomar menções (Admin)
-• `/stats` - Estatísticas
-• `/ping` - Verificar status
-    """
+    'total_admins': "• Total de Admins: {count}",
+    'bot_version': "• Versão: 5.0",
 }
 
-# Argentina
-ES_AR = {
-    'country': '🇦🇷 Argentina',
-    'language': 'Español',
-    # Spanish with Argentina dialect
-}
-
-# ==============================================
-# AFRICA
-# ==============================================
-
-# Nigeria - English
-EN_NG = {
-    'country': '🇳🇬 Nigeria',
-    'language': 'English',
-    'welcome_title': "🌟 **Welcome to Mention Bot!** 🌟",
-    'your_info': "**Your Information:**",
-    'user_id': "• Your ID: `{user_id}`",
+# 16. German (Deutsch) - Germany
+DE = {
+    'name': 'Deutsch',
+    'country': '🇩🇪 Germany',
+    'flag': '🇩🇪',
+    'welcome': "🌟 **Willkommen beim Mention Bot!** 🌟",
+    'your_info': "**Ihre Informationen:**",
+    'user_id': "• Ihre ID: `{user_id}`",
     'status': "• Status: {status}",
-    'owner': "• Bot Owner: `{owner_id}`",
     'admin_status': "👑 ADMIN",
-    'user_status': "👤 USER",
+    'user_status': "👤 BENUTZER",
+    'owner': "• Bot-Besitzer: `{owner_id}`",
     'support_btn': "📞 Support",
-    'add_btn': "➕ Add to Group",
-    'settings_btn': "⚙️ Settings",
-    'language_btn': "🌐 Language",
-    'back_btn': "🔙 Back",
-    'close_btn': "❌ Close",
-    'settings_title': "⚙️ **Bot Settings**",
-    'select_setting': "Select an option:",
-    'mention_settings': "📢 Mention Settings",
-    'admin_settings': "👑 Admin Settings",
-    'group_settings': "👥 Group Settings",
-    'language_settings': "🌐 Language Settings",
-    'mention_settings_title': "📢 **Mention Settings**",
-    'emoji_on': "✅ Emoji Mentions: ON",
-    'emoji_off': "❌ Emoji Mentions: OFF",
-    'mention_limit': "📊 Mention Limit: 50",
-    'mention_delay': "⏱️ Delay: 2 seconds",
-    'admin_settings_title': "👑 **Admin Settings**",
-    'total_admins': "• Total Admins: {count}",
-    'admin_list': "📋 Admin List",
-    'add_admin': "➕ Add Admin",
-    'remove_admin': "➖ Remove Admin",
-    'language_title': "🌐 **Select Language**",
-    'admin_only': "❌ Only admins can use this command!",
-    'group_only': "⚠️ This command only works in groups!",
-    'stopped': "⚠️ Mentions are stopped in this group. Use /resume to start again.",
-    'user_not_found': "❌ User not found!",
-    'promoted': "✅ **Admin Promoted!**",
-    'demoted': "✅ **Admin Demoted!**",
-    'already_admin': "⚠️ User is already an admin!",
-    'not_admin': "⚠️ User is not an admin!",
-    'broadcast_start': "📢 **Broadcast starting...**",
-    'broadcast_done': "✅ **Broadcast Complete!**",
-    'broadcast_usage': "⚠️ Usage: `/broadcast [message]`",
-    'stats_title': "📊 **Bot Statistics**",
-    'total_groups': "• Total Groups: {count}",
-    'total_users': "• Total Users: {count}",
-    'total_admins_stat': "• Total Admins: {count}",
-    'bot_version': "• Version: 3.0",
-    'help_title': "📚 **Mention Bot - Help**",
-    'help_text': """
-**Commands:**
-• `@all` - Mention everyone
-• `/tagall` - Mention everyone
-• `/hello [msg]` - Mention with message
-• `/online` - Mention online users
-• `/admins` - Mention admins
-• `/random [n]` - Random mentions
-• `/hidetag` - Hide tag
-• `/broadcast [msg]` - Broadcast (Admin)
-• `/promote` - Promote user (Admin)
-• `/demote` - Demote user (Admin)
-• `/adminlist` - List admins
-• `/stop` - Stop mentions (Admin)
-• `/resume` - Resume mentions (Admin)
-• `/stats` - Bot stats
-• `/ping` - Check status
-    """
+    'add_btn': "➕ Zur Gruppe hinzufügen",
+    'settings_btn': "⚙️ Einstellungen",
+    'language_btn': "🌐 Sprache",
+    'commands_btn': "📋 Befehle",
+    'close_btn': "❌ Schließen",
+    'back_btn': "🔙 Zurück",
+    'admin_only': "❌ Nur Admins können diesen Befehl verwenden!",
+    'group_only': "⚠️ Dieser Befehl funktioniert nur in Gruppen!",
+    'stopped': "⚠️ Erwähnungen in dieser Gruppe gestoppt. Verwenden Sie /resume zum Neustarten.",
+    'user_not_found': "❌ Benutzer nicht gefunden!",
+    'promoted': "✅ **Admin befördert!**",
+    'demoted': "✅ **Admin degradiert!**",
+    'already_admin': "⚠️ Benutzer ist bereits Admin!",
+    'not_admin': "⚠️ Benutzer ist kein Admin!",
+    'broadcast_start': "📢 **Rundsendung startet...**",
+    'broadcast_done': "✅ **Rundsendung abgeschlossen!**",
+    'broadcast_usage': "⚠️ Verwendung: `/broadcast [Nachricht]`",
+    'stats_title': "📊 **Bot-Statistiken**",
+    'total_groups': "• Gruppen insgesamt: {count}",
+    'total_users': "• Benutzer insgesamt: {count}",
+    'total_admins': "• Admins insgesamt: {count}",
+    'bot_version': "• Version: 5.0",
 }
 
-# South Africa - English & Afrikaans
-EN_ZA = {
-    'country': '🇿🇦 South Africa',
-    'language': 'English',
-    # Similar to EN_IN
+# 17. French (Français) - France
+FR = {
+    'name': 'Français',
+    'country': '🇫🇷 France',
+    'flag': '🇫🇷',
+    'welcome': "🌟 **Bienvenue sur Mention Bot!** 🌟",
+    'your_info': "**Vos informations:**",
+    'user_id': "• Votre ID: `{user_id}`",
+    'status': "• Statut: {status}",
+    'admin_status': "👑 ADMIN",
+    'user_status': "👤 UTILISATEUR",
+    'owner': "• Propriétaire du bot: `{owner_id}`",
+    'support_btn': "📞 Support",
+    'add_btn': "➕ Ajouter au groupe",
+    'settings_btn': "⚙️ Paramètres",
+    'language_btn': "🌐 Langue",
+    'commands_btn': "📋 Commandes",
+    'close_btn': "❌ Fermer",
+    'back_btn': "🔙 Retour",
+    'admin_only': "❌ Seuls les admins peuvent utiliser cette commande!",
+    'group_only': "⚠️ Cette commande ne fonctionne que dans les groupes!",
+    'stopped': "⚠️ Les mentions sont arrêtées dans ce groupe. Utilisez /resume pour recommencer.",
+    'user_not_found': "❌ Utilisateur non trouvé!",
+    'promoted': "✅ **Admin promu!**",
+    'demoted': "✅ **Admin rétrogradé!**",
+    'already_admin': "⚠️ L'utilisateur est déjà admin!",
+    'not_admin': "⚠️ L'utilisateur n'est pas admin!",
+    'broadcast_start': "📢 **Diffusion commencée...**",
+    'broadcast_done': "✅ **Diffusion terminée!**",
+    'broadcast_usage': "⚠️ Utilisation: `/broadcast [message]`",
+    'stats_title': "📊 **Statistiques du bot**",
+    'total_groups': "• Total des groupes: {count}",
+    'total_users': "• Total des utilisateurs: {count}",
+    'total_admins': "• Total des admins: {count}",
+    'bot_version': "• Version: 5.0",
 }
 
-# Egypt is already in Middle East section
-# Morocco
-AR_MA = {
-    'country': '🇲🇦 المغرب',
-    'language': 'العربية',
-    # Moroccan Arabic
+# 18. Turkish (Türkçe) - Turkey
+TR = {
+    'name': 'Türkçe',
+    'country': '🇹🇷 Turkey',
+    'flag': '🇹🇷',
+    'welcome': "🌟 **Mention Bot'a Hoş Geldiniz!** 🌟",
+    'your_info': "**Bilgileriniz:**",
+    'user_id': "• ID'niz: `{user_id}`",
+    'status': "• Durum: {status}",
+    'admin_status': "👑 ADMIN",
+    'user_status': "👤 KULLANICI",
+    'owner': "• Bot Sahibi: `{owner_id}`",
+    'support_btn': "📞 Destek",
+    'add_btn': "➕ Gruba Ekle",
+    'settings_btn': "⚙️ Ayarlar",
+    'language_btn': "🌐 Dil",
+    'commands_btn': "📋 Komutlar",
+    'close_btn': "❌ Kapat",
+    'back_btn': "🔙 Geri",
+    'admin_only': "❌ Bu komutu sadece adminler kullanabilir!",
+    'group_only': "⚠️ Bu komut sadece gruplarda çalışır!",
+    'stopped': "⚠️ Bu grupta mentionlar durduruldu. /resume ile tekrar başlatın.",
+    'user_not_found': "❌ Kullanıcı bulunamadı!",
+    'promoted': "✅ **Admin Yapıldı!**",
+    'demoted': "✅ **Adminlik Kaldırıldı!**",
+    'already_admin': "⚠️ Kullanıcı zaten admin!",
+    'not_admin': "⚠️ Kullanıcı admin değil!",
+    'broadcast_start': "📢 **Yayın başlıyor...**",
+    'broadcast_done': "✅ **Yayın tamamlandı!**",
+    'broadcast_usage': "⚠️ Kullanım: `/broadcast [mesaj]`",
+    'stats_title': "📊 **Bot İstatistikleri**",
+    'total_groups': "• Toplam Gruplar: {count}",
+    'total_users': "• Toplam Kullanıcılar: {count}",
+    'total_admins': "• Toplam Adminler: {count}",
+    'bot_version': "• Sürüm: 5.0",
+}
+
+# 19. Vietnamese (Tiếng Việt) - Vietnam
+VI = {
+    'name': 'Tiếng Việt',
+    'country': '🇻🇳 Vietnam',
+    'flag': '🇻🇳',
+    'welcome': "🌟 **Chào mừng đến với Mention Bot!** 🌟",
+    'your_info': "**Thông tin của bạn:**",
+    'user_id': "• ID của bạn: `{user_id}`",
+    'status': "• Trạng thái: {status}",
+    'admin_status': "👑 QUẢN TRỊ VIÊN",
+    'user_status': "👤 NGƯỜI DÙNG",
+    'owner': "• Chủ sở hữu Bot: `{owner_id}`",
+    'support_btn': "📞 Hỗ trợ",
+    'add_btn': "➕ Thêm vào Nhóm",
+    'settings_btn': "⚙️ Cài đặt",
+    'language_btn': "🌐 Ngôn ngữ",
+    'commands_btn': "📋 Lệnh",
+    'close_btn': "❌ Đóng",
+    'back_btn': "🔙 Quay lại",
+    'admin_only': "❌ Chỉ quản trị viên mới có thể sử dụng lệnh này!",
+    'group_only': "⚠️ Lệnh này chỉ hoạt động trong nhóm!",
+    'stopped': "⚠️ Mention đã dừng trong nhóm này. Sử dụng /resume để bắt đầu lại.",
+    'user_not_found': "❌ Không tìm thấy người dùng!",
+    'promoted': "✅ **Đã thăng chức quản trị viên!**",
+    'demoted': "✅ **Đã giáng chức quản trị viên!**",
+    'already_admin': "⚠️ Người dùng đã là quản trị viên!",
+    'not_admin': "⚠️ Người dùng không phải quản trị viên!",
+    'broadcast_start': "📢 **Đang phát sóng...**",
+    'broadcast_done': "✅ **Phát sóng hoàn tất!**",
+    'broadcast_usage': "⚠️ Cách dùng: `/broadcast [tin nhắn]`",
+    'stats_title': "📊 **Thống kê Bot**",
+    'total_groups': "• Tổng số nhóm: {count}",
+    'total_users': "• Tổng số người dùng: {count}",
+    'total_admins': "• Tổng số quản trị viên: {count}",
+    'bot_version': "• Phiên bản: 5.0",
+}
+
+# 20. Thai (ภาษาไทย) - Thailand
+TH = {
+    'name': 'ภาษาไทย',
+    'country': '🇹🇭 Thailand',
+    'flag': '🇹🇭',
+    'welcome': "🌟 **ยินดีต้อนรับสู่ Mention Bot!** 🌟",
+    'your_info': "**ข้อมูลของคุณ:**",
+    'user_id': "• ID ของคุณ: `{user_id}`",
+    'status': "• สถานะ: {status}",
+    'admin_status': "👑 ผู้ดูแลระบบ",
+    'user_status': "👤 ผู้ใช้",
+    'owner': "• เจ้าของบอท: `{owner_id}`",
+    'support_btn': "📞 สนับสนุน",
+    'add_btn': "➕ เพิ่มในกลุ่ม",
+    'settings_btn': "⚙️ การตั้งค่า",
+    'language_btn': "🌐 ภาษา",
+    'commands_btn': "📋 คำสั่ง",
+    'close_btn': "❌ ปิด",
+    'back_btn': "🔙 กลับ",
+    'admin_only': "❌ เฉพาะผู้ดูแลระบบเท่านั้นที่ใช้คำสั่งนี้!",
+    'group_only': "⚠️ คำสั่งนี้ใช้ได้เฉพาะในกลุ่ม!",
+    'stopped': "⚠️ การกล่าวถึงหยุดในกลุ่มนี้ ใช้ /resume เพื่อเริ่มใหม่",
+    'user_not_found': "❌ ไม่พบผู้ใช้!",
+    'promoted': "✅ **เลื่อนเป็นผู้ดูแลระบบ!**",
+    'demoted': "✅ **ลดระดับผู้ดูแลระบบ!**",
+    'already_admin': "⚠️ ผู้ใช้เป็นผู้ดูแลระบบอยู่แล้ว!",
+    'not_admin': "⚠️ ผู้ใช้ไม่ใช่ผู้ดูแลระบบ!",
+    'broadcast_start': "📢 **กำลังเริ่มออกอากาศ...**",
+    'broadcast_done': "✅ **ออกอากาศเสร็จสิ้น!**",
+    'broadcast_usage': "⚠️ วิธีใช้: `/broadcast [ข้อความ]`",
+    'stats_title': "📊 **สถิติบอท**",
+    'total_groups': "• กลุ่มทั้งหมด: {count}",
+    'total_users': "• ผู้ใช้ทั้งหมด: {count}",
+    'total_admins': "• ผู้ดูแลระบบทั้งหมด: {count}",
+    'bot_version': "• เวอร์ชัน: 5.0",
 }
 
 # ==============================================
@@ -830,118 +756,73 @@ AR_MA = {
 # ==============================================
 
 LANGUAGES = {
+    # India - 10 Languages
     'hi': HI,
     'en_in': EN_IN,
+    'bn': BN,
+    'te': TE,
+    'mr': MR,
+    'ta': TA,
+    'ur': UR,
+    'gu': GU,
+    'kn': KN,
+    'ml': ML,
+    
+    # Top Telegram Countries
     'id': ID,
     'ms': MS,
-    'ar_sa': AR_SA,
-    'ar_eg': AR_EG,
-    'ar_ae': AR_AE,
     'ru': RU,
-    'uk': UK,
-    'kk': KK,
-    'en_gb': EN_GB,
+    'ar': AR,
+    'pt_br': PT_BR,
     'de': DE,
     'fr': FR,
-    'it': IT,
-    'es': ES,
-    'nl': NL,
-    'pl': PL,
-    'pt_br': PT_BR,
-    'es_ar': ES_AR,
-    'en_ng': EN_NG,
-    'en_za': EN_ZA,
-    'ar_ma': AR_MA,
+    'tr': TR,
+    'vi': VI,
+    'th': TH,
 }
 
-# Country flags mapping
-COUNTRY_FLAGS = {
-    'hi': '🇮🇳',
-    'en_in': '🇮🇳',
-    'id': '🇮🇩',
-    'ms': '🇲🇾',
-    'ar_sa': '🇸🇦',
-    'ar_eg': '🇪🇬',
-    'ar_ae': '🇦🇪',
-    'ru': '🇷🇺',
-    'uk': '🇺🇦',
-    'kk': '🇰🇿',
-    'en_gb': '🇬🇧',
-    'de': '🇩🇪',
-    'fr': '🇫🇷',
-    'it': '🇮🇹',
-    'es': '🇪🇸',
-    'nl': '🇳🇱',
-    'pl': '🇵🇱',
-    'pt_br': '🇧🇷',
-    'es_ar': '🇦🇷',
-    'en_ng': '🇳🇬',
-    'en_za': '🇿🇦',
-    'ar_ma': '🇲🇦',
-}
+# ==============================================
+# LANGUAGE LIST FOR BUTTONS
+# ==============================================
 
-# Country names
-COUNTRY_NAMES = {
-    'hi': 'India',
-    'en_in': 'India',
-    'id': 'Indonesia',
-    'ms': 'Malaysia',
-    'ar_sa': 'Saudi Arabia',
-    'ar_eg': 'Egypt',
-    'ar_ae': 'UAE',
-    'ru': 'Russia',
-    'uk': 'Ukraine',
-    'kk': 'Kazakhstan',
-    'en_gb': 'United Kingdom',
-    'de': 'Germany',
-    'fr': 'France',
-    'it': 'Italy',
-    'es': 'Spain',
-    'nl': 'Netherlands',
-    'pl': 'Poland',
-    'pt_br': 'Brazil',
-    'es_ar': 'Argentina',
-    'en_ng': 'Nigeria',
-    'en_za': 'South Africa',
-    'ar_ma': 'Morocco',
-}
+LANGUAGE_LIST = [
+    # India (10 Languages)
+    ('hi', '🇮🇳', 'हिंदी'),
+    ('en_in', '🇮🇳', 'English'),
+    ('bn', '🇮🇳', 'বাংলা'),
+    ('te', '🇮🇳', 'తెలుగు'),
+    ('mr', '🇮🇳', 'मराठी'),
+    ('ta', '🇮🇳', 'தமிழ்'),
+    ('ur', '🇮🇳', 'اردو'),
+    ('gu', '🇮🇳', 'ગુજરાતી'),
+    ('kn', '🇮🇳', 'ಕನ್ನಡ'),
+    ('ml', '🇮🇳', 'മലയാളം'),
+    
+    # Top Telegram Countries
+    ('id', '🇮🇩', 'Indonesia'),
+    ('ms', '🇲🇾', 'Malaysia'),
+    ('ru', '🇷🇺', 'Русский'),
+    ('ar', '🇪🇬', 'العربية'),
+    ('pt_br', '🇧🇷', 'Português'),
+    ('de', '🇩🇪', 'Deutsch'),
+    ('fr', '🇫🇷', 'Français'),
+    ('tr', '🇹🇷', 'Türkçe'),
+    ('vi', '🇻🇳', 'Tiếng Việt'),
+    ('th', '🇹🇭', 'ภาษาไทย'),
+]
 
-# Language names in their own language
-LANGUAGE_NAMES = {
-    'hi': 'हिंदी',
-    'en_in': 'English',
-    'id': 'Bahasa Indonesia',
-    'ms': 'Bahasa Melayu',
-    'ar_sa': 'العربية',
-    'ar_eg': 'العربية (مصري)',
-    'ar_ae': 'العربية (إماراتي)',
-    'ru': 'Русский',
-    'uk': 'Українська',
-    'kk': 'Қазақша',
-    'en_gb': 'English',
-    'de': 'Deutsch',
-    'fr': 'Français',
-    'it': 'Italiano',
-    'es': 'Español',
-    'nl': 'Nederlands',
-    'pl': 'Polski',
-    'pt_br': 'Português',
-    'es_ar': 'Español (Rioplatense)',
-    'en_ng': 'English',
-    'en_za': 'English',
-    'ar_ma': 'العربية (المغربية)',
-}
-
-# Top Telegram using countries (in order)
-TOP_TELEGRAM_COUNTRIES = [
-    ('hi', 'India', '🇮🇳', 'Most Users - 200M+'),
-    ('id', 'Indonesia', '🇮🇩', '2nd Largest - 150M+'),
-    ('ru', 'Russia', '🇷🇺', '3rd Largest - 100M+'),
-    ('ar_eg', 'Egypt', '🇪🇬', '4th Largest - 80M+'),
-    ('pt_br', 'Brazil', '🇧🇷', '5th Largest - 70M+'),
-    ('ms', 'Malaysia', '🇲🇾', '6th Largest - 50M+'),
-    ('ar_sa', 'Saudi Arabia', '🇸🇦', '7th Largest - 40M+'),
-    ('uk', 'Ukraine', '🇺🇦', '8th Largest - 35M+'),
-    ('en_ng', 'Nigeria', '🇳🇬', '9th Largest - 30M+'),
-    ('ar_ae', 'UAE', '🇦🇪', '10th Largest - 25M+'),
+# ==============================================
+# TOP 10 TELEGRAM COUNTRIES
+# ==============================================
+TOP_COUNTRIES = [
+    ('hi', '🇮🇳', 'India - Hindi'),
+    ('en_in', '🇮🇳', 'India - English'),
+    ('id', '🇮🇩', 'Indonesia'),
+    ('ms', '🇲🇾', 'Malaysia'),
+    ('ru', '🇷🇺', 'Russia'),
+    ('ar', '🇪🇬', 'Egypt'),
+    ('pt_br', '🇧🇷', 'Brazil'),
+    ('vi', '🇻🇳', 'Vietnam'),
+    ('th', '🇹🇭', 'Thailand'),
+    ('tr', '🇹🇷', 'Turkey'),
 ]
