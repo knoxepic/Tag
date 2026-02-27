@@ -15,10 +15,10 @@ import json
 from languages import LANGUAGES, LANGUAGE_LIST, TOP_LANGUAGES, get_text
 
 # ==============================================
-# CONFIGURATION
+# CONFIGURATION - FIXED SYNTAX ERROR
 # ==============================================
 api_id = int(os.environ.get('API_ID', 29568441))
-api_hash = os.environ.get('API_HASH', 'b32ec0fb66d22da6f77d355fbace4f2a)
+api_hash = os.environ.get('API_HASH', 'b32ec0fb66d22da6f77d355fbace4f2a')  # <-- Fixed: properly closed string
 bot_token = os.environ.get('BOT_TOKEN', '8574288227:AAGT1pauRQSnUiTbxVPPFVJl5SGS-Olh968')
 
 OWNER_ID = 7957361876  # <-- APNI ID YAHAN DALEIN
@@ -169,24 +169,23 @@ def get_main_menu_buttons(user_id):
     """Get main menu buttons - 3 buttons per row"""
     lang = get_user_lang(user_id)
     buttons = [
-        [Button.inline(get_text(lang, 'support_btn'), b'support'),
-         Button.inline(get_text(lang, 'add_btn'), b'add_group'),
-         Button.inline(get_text(lang, 'settings_btn'), b'settings')],
-        [Button.inline(get_text(lang, 'language_btn'), b'language'),
-         Button.inline(get_text(lang, 'commands_btn'), b'commands'),
-         Button.inline(get_text(lang, 'close_btn'), b'close')]
+        [Button.inline("📞 Support", b'support'),
+         Button.inline("➕ Add to Group", b'add_group'),
+         Button.inline("⚙️ Settings", b'settings')],
+        [Button.inline("🌐 Language", b'language'),
+         Button.inline("📋 Commands", b'commands'),
+         Button.inline("❌ Close", b'close')]
     ]
     return buttons
 
 def get_settings_buttons(user_id):
     """Get settings menu buttons"""
-    lang = get_user_lang(user_id)
     buttons = [
         [Button.inline("📢 Mention Settings", b'settings_mention'),
          Button.inline("👑 Admin Settings", b'settings_admin')],
         [Button.inline("👥 Group Settings", b'settings_group'),
-         Button.inline(get_text(lang, 'language_btn'), b'language')],
-        [Button.inline(get_text(lang, 'back_btn'), b'main_menu')]
+         Button.inline("🌐 Language", b'language')],
+        [Button.inline("🔙 Back", b'main_menu')]
     ]
     return buttons
 
@@ -205,9 +204,8 @@ def get_language_buttons(user_id):
         buttons.append(row)
     
     # More languages button
-    lang = get_user_lang(user_id)
     buttons.append([Button.inline("🌐 More Languages", b'lang_more')])
-    buttons.append([Button.inline(get_text(lang, 'back_btn'), b'main_menu')])
+    buttons.append([Button.inline("🔙 Back", b'main_menu')])
     
     return buttons
 
@@ -224,14 +222,12 @@ def get_more_languages_buttons(user_id):
     if row:
         buttons.append(row)
     
-    lang = get_user_lang(user_id)
-    buttons.append([Button.inline(get_text(lang, 'back_btn'), b'language')])
+    buttons.append([Button.inline("🔙 Back", b'language')])
     return buttons
 
 def get_commands_buttons(user_id):
     """Get commands menu buttons"""
     is_admin = user_id in ADMIN_IDS
-    lang = get_user_lang(user_id)
     
     buttons = [
         [Button.inline("👤 User Commands", b'cmds_user'),
@@ -241,7 +237,7 @@ def get_commands_buttons(user_id):
     if is_admin:
         buttons.append([Button.inline("👑 Admin Commands", b'cmds_admin')])
     
-    buttons.append([Button.inline(get_text(lang, 'back_btn'), b'main_menu')])
+    buttons.append([Button.inline("🔙 Back", b'main_menu')])
     
     return buttons
 
@@ -256,16 +252,19 @@ async def start_handler(event):
     is_admin_user = user_id in ADMIN_IDS
     lang = get_user_lang(user_id)
     
-    status = get_text(lang, 'admin_status') if is_admin_user else get_text(lang, 'user_status')
+    status = "👑 ADMIN" if is_admin_user else "👤 USER"
     
-    welcome_msg = (
-        f"{get_text(lang, 'welcome')}\n\n"
-        f"👋 Hello {event.sender.first_name}!\n\n"
-        f"{get_text(lang, 'your_info')}\n"
-        f"{get_text(lang, 'user_id', user_id=user_id)}\n"
-        f"{get_text(lang, 'status', status=status)}\n"
-        f"{get_text(lang, 'owner', owner_id=OWNER_ID)}"
-    )
+    welcome_msg = f"""
+🌟 **Welcome to Mention Bot!** 🌟
+
+👋 Hello {event.sender.first_name}!
+
+**Your Information:**
+• Your ID: `{user_id}`
+• Status: {status}
+• Bot Owner: `{OWNER_ID}`
+• Language: {LANGUAGES[lang]['name']} {LANGUAGES[lang]['flag']}
+"""
     
     buttons = get_main_menu_buttons(user_id)
     await event.reply(welcome_msg, buttons=buttons)
@@ -332,14 +331,13 @@ async def mention_handler(event):
 async def handle_tagall(event):
     """Handle @all, @tagall, /tagall, /all"""
     user_id = event.sender_id
-    lang = get_user_lang(user_id)
     
     if user_id not in ADMIN_IDS:
-        await event.reply(get_text(lang, 'admin_only'))
+        await event.reply("❌ Only admins can use this command!")
         return
     
     if is_stopped(event.chat_id):
-        await event.reply(get_text(lang, 'stopped'))
+        await event.reply("⚠️ Mentions are stopped in this group. Use /resume to start again.")
         return
     
     try:
@@ -379,14 +377,13 @@ async def handle_tagall(event):
 async def handle_hello(event):
     """Handle /hello command - Mention with message"""
     user_id = event.sender_id
-    lang = get_user_lang(user_id)
     
     if user_id not in ADMIN_IDS:
-        await event.reply(get_text(lang, 'admin_only'))
+        await event.reply("❌ Only admins can use this command!")
         return
     
     if is_stopped(event.chat_id):
-        await event.reply(get_text(lang, 'stopped'))
+        await event.reply("⚠️ Mentions are stopped in this group. Use /resume to start again.")
         return
     
     try:
@@ -430,14 +427,13 @@ async def handle_hello(event):
 async def handle_online(event):
     """Handle /online command - Mention online users"""
     user_id = event.sender_id
-    lang = get_user_lang(user_id)
     
     if user_id not in ADMIN_IDS:
-        await event.reply(get_text(lang, 'admin_only'))
+        await event.reply("❌ Only admins can use this command!")
         return
     
     if is_stopped(event.chat_id):
-        await event.reply(get_text(lang, 'stopped'))
+        await event.reply("⚠️ Mentions are stopped in this group. Use /resume to start again.")
         return
     
     try:
@@ -487,10 +483,9 @@ async def handle_online(event):
 async def handle_admins(event):
     """Handle /admins command - Mention admins"""
     user_id = event.sender_id
-    lang = get_user_lang(user_id)
     
     if user_id not in ADMIN_IDS:
-        await event.reply(get_text(lang, 'admin_only'))
+        await event.reply("❌ Only admins can use this command!")
         return
     
     try:
@@ -543,14 +538,13 @@ async def handle_admins(event):
 async def handle_random(event):
     """Handle /random command - Random mentions"""
     user_id = event.sender_id
-    lang = get_user_lang(user_id)
     
     if user_id not in ADMIN_IDS:
-        await event.reply(get_text(lang, 'admin_only'))
+        await event.reply("❌ Only admins can use this command!")
         return
     
     if is_stopped(event.chat_id):
-        await event.reply(get_text(lang, 'stopped'))
+        await event.reply("⚠️ Mentions are stopped in this group. Use /resume to start again.")
         return
     
     try:
@@ -597,10 +591,9 @@ async def handle_random(event):
 async def handle_pause(event):
     """Handle /pause command - Same as stop"""
     user_id = event.sender_id
-    lang = get_user_lang(user_id)
     
     if user_id not in ADMIN_IDS:
-        await event.reply(get_text(lang, 'admin_only'))
+        await event.reply("❌ Only admins can use this command!")
         return
     
     set_stop(event.chat_id, True)
@@ -618,10 +611,9 @@ async def stop_handler(event):
         return
     
     user_id = event.sender_id
-    lang = get_user_lang(user_id)
     
     if user_id not in ADMIN_IDS:
-        await event.reply(get_text(lang, 'admin_only'))
+        await event.reply("❌ Only admins can use this command!")
         return
     
     set_stop(event.chat_id, True)
@@ -635,10 +627,9 @@ async def resume_handler(event):
         return
     
     user_id = event.sender_id
-    lang = get_user_lang(user_id)
     
     if user_id not in ADMIN_IDS:
-        await event.reply(get_text(lang, 'admin_only'))
+        await event.reply("❌ Only admins can use this command!")
         return
     
     set_stop(event.chat_id, False)
@@ -648,25 +639,24 @@ async def resume_handler(event):
 async def broadcast_handler(event):
     """Broadcast message to all groups"""
     user_id = event.sender_id
-    lang = get_user_lang(user_id)
     
     if user_id not in ADMIN_IDS:
-        await event.reply(get_text(lang, 'admin_only'))
+        await event.reply("❌ Only admins can use this command!")
         return
     
     parts = event.message.text.split(maxsplit=1)
     
     if len(parts) < 2:
-        await event.reply(get_text(lang, 'broadcast_usage'))
+        await event.reply("⚠️ Usage: `/broadcast [message]`")
         return
     
     broadcast_msg = parts[1].strip()
     
     if not broadcast_msg:
-        await event.reply(get_text(lang, 'broadcast_usage'))
+        await event.reply("⚠️ Message cannot be empty!")
         return
     
-    progress = await event.reply(get_text(lang, 'broadcast_start'))
+    progress = await event.reply("📢 **Broadcast starting...**")
     
     try:
         dialogs = await client.get_dialogs()
@@ -689,7 +679,7 @@ async def broadcast_handler(event):
                 
                 if i % 5 == 0:
                     await progress.edit(
-                        f"{get_text(lang, 'broadcast_start')}\n\n"
+                        f"📢 **Broadcasting...**\n\n"
                         f"Progress: {i}/{len(groups)}\n"
                         f"Success: {success}\n"
                         f"Failed: {failed}"
@@ -701,7 +691,7 @@ async def broadcast_handler(event):
                 failed += 1
         
         await progress.edit(
-            f"{get_text(lang, 'broadcast_done')}\n\n"
+            f"✅ **Broadcast Complete!**\n\n"
             f"Total Groups: {len(groups)}\n"
             f"✅ Success: {success}\n"
             f"❌ Failed: {failed}"
@@ -714,10 +704,9 @@ async def broadcast_handler(event):
 async def stats_handler(event):
     """Bot statistics"""
     user_id = event.sender_id
-    lang = get_user_lang(user_id)
     
     if user_id not in ADMIN_IDS:
-        await event.reply(get_text(lang, 'admin_only'))
+        await event.reply("❌ Only admins can use this command!")
         return
     
     try:
@@ -754,7 +743,6 @@ async def callback_handler(event):
     """Handle button clicks"""
     user_id = event.sender_id
     data = event.data.decode()
-    lang = get_user_lang(user_id)
     
     if data == 'support':
         await event.answer("Opening support group...")
@@ -765,7 +753,7 @@ async def callback_handler(event):
             "• Report bugs\n"
             "• Request features\n"
             "• Get help",
-            buttons=[[Button.inline(get_text(lang, 'back_btn'), b'main_menu')]]
+            buttons=[[Button.inline("🔙 Back", b'main_menu')]]
         )
     
     elif data == 'add_group':
@@ -777,7 +765,7 @@ async def callback_handler(event):
             f"https://t.me/{bot_username}?startgroup=start\n\n"
             f"**Step 2:** Select your group\n\n"
             f"**Step 3:** Make me admin for full features",
-            buttons=[[Button.inline(get_text(lang, 'back_btn'), b'main_menu')]]
+            buttons=[[Button.inline("🔙 Back", b'main_menu')]]
         )
     
     elif data == 'settings':
@@ -809,7 +797,7 @@ async def callback_handler(event):
         text += "• /start - Start the bot\n"
         text += "• /help - Show help menu\n"
         text += "• /ping - Check bot status"
-        await event.edit(text, buttons=[[Button.inline(get_text(lang, 'back_btn'), b'commands')]])
+        await event.edit(text, buttons=[[Button.inline("🔙 Back", b'commands')]])
     
     elif data == 'cmds_mention':
         text = "📢 **MENTION COMMANDS:**\n\n"
@@ -821,7 +809,7 @@ async def callback_handler(event):
         text += "• /online - Mention online users\n"
         text += "• /admins - Mention admins\n"
         text += "• /random [n] - Random mentions (1-50)"
-        await event.edit(text, buttons=[[Button.inline(get_text(lang, 'back_btn'), b'commands')]])
+        await event.edit(text, buttons=[[Button.inline("🔙 Back", b'commands')]])
     
     elif data == 'cmds_admin':
         if user_id in ADMIN_IDS:
@@ -831,7 +819,7 @@ async def callback_handler(event):
             text += "• /resume - Resume mentions\n"
             text += "• /stats - Bot statistics\n"
             text += "• /pause - Pause mentions"
-            await event.edit(text, buttons=[[Button.inline(get_text(lang, 'back_btn'), b'commands')]])
+            await event.edit(text, buttons=[[Button.inline("🔙 Back", b'commands')]])
         else:
             await event.answer("Only admins can view this!", alert=True)
     
@@ -844,7 +832,7 @@ async def callback_handler(event):
             "Use commands:\n"
             "/tagall - Normal mention\n"
             "/hello - Mention with message",
-            buttons=[[Button.inline(get_text(lang, 'back_btn'), b'settings')]]
+            buttons=[[Button.inline("🔙 Back", b'settings')]]
         )
     
     elif data == 'settings_admin':
@@ -854,7 +842,7 @@ async def callback_handler(event):
             f"• Total Admins: {admin_count}\n"
             f"• Owner ID: `{OWNER_ID}`\n\n"
             f"**Your Status:** {'✅ Admin' if user_id in ADMIN_IDS else '❌ Not Admin'}",
-            buttons=[[Button.inline(get_text(lang, 'back_btn'), b'settings')]]
+            buttons=[[Button.inline("🔙 Back", b'settings')]]
         )
     
     elif data == 'settings_group':
@@ -864,20 +852,24 @@ async def callback_handler(event):
             "• /resume - Resume mentions\n"
             "• /pause - Pause mentions\n\n"
             "**Note:** Bot needs to be admin",
-            buttons=[[Button.inline(get_text(lang, 'back_btn'), b'settings')]]
+            buttons=[[Button.inline("🔙 Back", b'settings')]]
         )
     
     elif data == 'main_menu':
         is_admin_user = user_id in ADMIN_IDS
-        status = get_text(lang, 'admin_status') if is_admin_user else get_text(lang, 'user_status')
+        status = "👑 ADMIN" if is_admin_user else "👤 USER"
+        lang = get_user_lang(user_id)
         
-        welcome_msg = (
-            f"{get_text(lang, 'welcome')}\n\n"
-            f"👋 Hello!\n\n"
-            f"{get_text(lang, 'your_info')}\n"
-            f"{get_text(lang, 'user_id', user_id=user_id)}\n"
-            f"{get_text(lang, 'status', status=status)}"
-        )
+        welcome_msg = f"""
+🌟 **Welcome to Mention Bot!** 🌟
+
+👋 Hello!
+
+**Your Information:**
+• Your ID: `{user_id}`
+• Status: {status}
+• Language: {LANGUAGES[lang]['name']} {LANGUAGES[lang]['flag']}
+"""
         await event.edit(welcome_msg, buttons=get_main_menu_buttons(user_id))
     
     elif data == 'close':
@@ -888,20 +880,23 @@ async def callback_handler(event):
         user_languages[str(user_id)] = lang_code
         save_user_languages()
         
-        await event.answer(f"Language changed to {LANGUAGES[lang_code]['name']}!")
+        lang_name = LANGUAGES[lang_code]['name']
+        await event.answer(f"Language changed to {lang_name}!")
         
         # Refresh menu
         is_admin_user = user_id in ADMIN_IDS
-        new_lang = get_user_lang(user_id)
-        status = get_text(new_lang, 'admin_status') if is_admin_user else get_text(new_lang, 'user_status')
+        status = "👑 ADMIN" if is_admin_user else "👤 USER"
         
-        welcome_msg = (
-            f"{get_text(new_lang, 'welcome')}\n\n"
-            f"👋 Hello!\n\n"
-            f"{get_text(new_lang, 'your_info')}\n"
-            f"{get_text(new_lang, 'user_id', user_id=user_id)}\n"
-            f"{get_text(new_lang, 'status', status=status)}"
-        )
+        welcome_msg = f"""
+🌟 **Welcome to Mention Bot!** 🌟
+
+👋 Hello!
+
+**Your Information:**
+• Your ID: `{user_id}`
+• Status: {status}
+• Language: {LANGUAGES[lang_code]['name']} {LANGUAGES[lang_code]['flag']}
+"""
         await event.edit(welcome_msg, buttons=get_main_menu_buttons(user_id))
 
 # ==============================================
