@@ -11,9 +11,6 @@ import re
 from datetime import datetime
 import json
 
-# Import languages
-from languages import LANGUAGES, LANGUAGE_LIST, TOP_LANGUAGES
-
 # ==============================================
 # CONFIGURATION
 # ==============================================
@@ -21,7 +18,7 @@ api_id = int(os.environ.get('API_ID', 28761567))
 api_hash = os.environ.get('API_HASH', 'b6320c0cc62a97d3a7d4e3055e6b9e0d')
 bot_token = os.environ.get('BOT_TOKEN', '7798323410:AAEr5G-_15rq1H1QTTz7sWjSpEaLzN_7tuU')
 
-OWNER_ID = 28761567  # <-- APNI ID YAHAN DALEIN
+OWNER_ID = 7957361876  # <-- APNI ID YAHAN DALEIN
 ADMIN_IDS = [OWNER_ID]
 user_languages = {}
 
@@ -29,6 +26,28 @@ user_languages = {}
 ADMIN_FILE = "admins.txt"
 STOP_FILE = "stop.txt"
 LANG_FILE = "languages.json"
+
+# ==============================================
+# LANGUAGES (Simplified for now)
+# ==============================================
+
+LANGUAGES = {
+    'en': {
+        'name': 'English',
+        'flag': '🇬🇧',
+        'welcome': "🌟 Welcome to Mention Bot! 🌟",
+    },
+    'hi': {
+        'name': 'हिंदी',
+        'flag': '🇮🇳',
+        'welcome': "🌟 मेंशन बॉट में आपका स्वागत है! 🌟",
+    }
+}
+
+TOP_LANGUAGES = [
+    ('en', '🇬🇧', 'English'),
+    ('hi', '🇮🇳', 'हिंदी'),
+]
 
 # ==============================================
 # HELPER FUNCTIONS
@@ -117,12 +136,15 @@ class HealthCheckHandler(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/html')
         self.end_headers()
         html = f'''
-        <html><body>
-            <h1>🤖 Mention Bot Running!</h1>
-            <p>Admins: {len(ADMIN_IDS)}</p>
-            <p>Owner: {OWNER_ID}</p>
-            <p>Status: ✅ Online</p>
-        </body></html>
+        <html>
+            <head><title>Mention Bot</title></head>
+            <body style="font-family: Arial; text-align: center; padding: 50px;">
+                <h1>🤖 Mention Bot is Running!</h1>
+                <p>Admins: {len(ADMIN_IDS)}</p>
+                <p>Owner: {OWNER_ID}</p>
+                <p>Status: ✅ Online</p>
+            </body>
+        </html>
         '''
         self.wfile.write(html.encode())
     
@@ -131,7 +153,7 @@ class HealthCheckHandler(BaseHTTPRequestHandler):
 
 def run_http():
     server = HTTPServer(('0.0.0.0', 10000), HealthCheckHandler)
-    print("📡 HTTP server running")
+    print("📡 HTTP server running on port 10000")
     server.serve_forever()
 
 threading.Thread(target=run_http, daemon=True).start()
@@ -144,34 +166,82 @@ client = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
 print("🚀 Bot started!")
 
 # ==============================================
-# COMMAND HANDLERS - FIXED ORDER
+# BUTTON FUNCTIONS
+# ==============================================
+
+def get_main_menu_buttons():
+    """Main menu buttons - 3 per row"""
+    buttons = [
+        [Button.inline("📞 Support", b'support'),
+         Button.inline("➕ Add to Group", b'add_group'),
+         Button.inline("⚙️ Settings", b'settings')],
+        [Button.inline("🌐 Language", b'language'),
+         Button.inline("📋 Commands", b'commands'),
+         Button.inline("❌ Close", b'close')]
+    ]
+    return buttons
+
+def get_settings_buttons():
+    """Settings menu buttons"""
+    buttons = [
+        [Button.inline("📢 Mention Settings", b'settings_mention'),
+         Button.inline("👑 Admin Settings", b'settings_admin')],
+        [Button.inline("👥 Group Settings", b'settings_group'),
+         Button.inline("🌐 Language", b'language')],
+        [Button.inline("🔙 Back", b'main_menu')]
+    ]
+    return buttons
+
+def get_language_buttons():
+    """Language selection buttons"""
+    buttons = []
+    row = []
+    for lang_code, flag, name in TOP_LANGUAGES:
+        row.append(Button.inline(f"{flag} {name}", f'lang_{lang_code}'.encode()))
+        if len(row) == 2:
+            buttons.append(row)
+            row = []
+    if row:
+        buttons.append(row)
+    buttons.append([Button.inline("🔙 Back", b'main_menu')])
+    return buttons
+
+def get_commands_buttons(is_admin):
+    """Commands menu buttons"""
+    buttons = [
+        [Button.inline("👤 User Commands", b'cmds_user'),
+         Button.inline("📢 Mention Commands", b'cmds_mention')]
+    ]
+    if is_admin:
+        buttons.append([Button.inline("👑 Admin Commands", b'cmds_admin')])
+    buttons.append([Button.inline("🔙 Back", b'main_menu')])
+    return buttons
+
+# ==============================================
+# COMMAND HANDLERS
 # ==============================================
 
 @client.on(events.NewMessage(pattern='/start'))
 async def start_handler(event):
-    """Start command"""
+    """Start command with buttons"""
     user_id = event.sender_id
     is_admin = user_id in ADMIN_IDS
-    lang = get_user_lang(user_id)
     
     msg = f"""
 🌟 **Welcome to Mention Bot!** 🌟
 
 👋 Hello {event.sender.first_name}!
 
-**Your Info:**
+**Your Information:**
 • ID: `{user_id}`
 • Status: {'👑 ADMIN' if is_admin else '👤 USER'}
 • Owner: `{OWNER_ID}`
 
-**Commands:**
-• /help - Show all commands
-• @all - Mention everyone
-• /online - Mention online users
-• /admins - Mention admins
-• /random 5 - Random mentions
-    """
-    await event.reply(msg)
+**📌 Quick Guide:**
+• Use buttons below
+• Type /help for all commands
+"""
+    await event.reply(msg, buttons=get_main_menu_buttons())
 
 @client.on(events.NewMessage(pattern='/help'))
 async def help_handler(event):
@@ -180,36 +250,36 @@ async def help_handler(event):
     is_admin = user_id in ADMIN_IDS
     
     text = "📚 **ALL COMMANDS**\n\n"
-    text += "👤 **USER:**\n"
-    text += "• /start - Start bot\n"
-    text += "• /help - This menu\n\n"
+    text += "👤 **USER COMMANDS:**\n"
+    text += "• /start - Start the bot\n"
+    text += "• /help - Show help menu\n\n"
     
-    text += "📢 **MENTION:**\n"
+    text += "📢 **MENTION COMMANDS:**\n"
     text += "• @all - Mention everyone\n"
     text += "• @tagall - Mention everyone\n"
     text += "• /tagall - Mention everyone\n"
     text += "• /all - Mention everyone\n"
     text += "• /online - Mention online users\n"
     text += "• /admins - Mention admins\n"
-    text += "• /random [n] - Random mentions\n\n"
+    text += "• /random [n] - Random mentions (1-50)\n\n"
     
     if is_admin:
-        text += "👑 **ADMIN:**\n"
-        text += "• /broadcast [msg] - Broadcast\n"
-        text += "• /stop - Stop mentions\n"
-        text += "• /resume - Resume mentions\n"
-        text += "• /stats - Bot stats\n"
+        text += "👑 **ADMIN COMMANDS:**\n"
+        text += "• /broadcast [msg] - Broadcast to all groups\n"
+        text += "• /stop - Stop mentions in group\n"
+        text += "• /resume - Resume mentions in group\n"
+        text += "• /stats - Bot statistics\n"
         text += "• /pause - Pause mentions\n"
     
     await event.reply(text)
 
 # ==============================================
-# MENTION COMMANDS - INDIVIDUAL HANDLERS
+# MENTION COMMANDS
 # ==============================================
 
-@client.on(events.NewMessage(pattern='(?i)@all|@tagall|/tagall|/all'))
-async def tagall_command(event):
-    """Handle @all, @tagall, /tagall, /all"""
+@client.on(events.NewMessage(pattern=r'(?i)(@all|@tagall|/tagall|/all)$'))
+async def tagall_handler(event):
+    """Mention everyone"""
     if not event.is_group:
         await event.reply("❌ This command only works in groups!")
         return
@@ -258,8 +328,8 @@ async def tagall_command(event):
         await event.reply(f"❌ Error: {str(e)}")
 
 @client.on(events.NewMessage(pattern='/online'))
-async def online_command(event):
-    """Handle /online command"""
+async def online_handler(event):
+    """Mention online users"""
     if not event.is_group:
         await event.reply("❌ This command only works in groups!")
         return
@@ -302,14 +372,14 @@ async def online_command(event):
                     count += 1
                     total += 1
                 else:
-                    await event.reply(f"🟢 **Online:**\n\n{mentions}")
+                    await event.reply(f"🟢 **Online Members:**\n\n{mentions}")
                     mentions = mention + " "
                     count = 1
                     total += 1
                     await asyncio.sleep(2)
         
         if mentions:
-            await event.reply(f"🟢 **Online:**\n\n{mentions}")
+            await event.reply(f"🟢 **Online Members:**\n\n{mentions}")
         
         await msg.delete()
         await event.reply(f"✅ {total} online members mentioned!")
@@ -318,8 +388,8 @@ async def online_command(event):
         await event.reply(f"❌ Error: {str(e)}")
 
 @client.on(events.NewMessage(pattern='/admins'))
-async def admins_command(event):
-    """Handle /admins command"""
+async def admins_handler(event):
+    """Mention admins"""
     if not event.is_group:
         await event.reply("❌ This command only works in groups!")
         return
@@ -361,14 +431,14 @@ async def admins_command(event):
                     count += 1
                     total += 1
                 else:
-                    await event.reply(f"👑 **Admins:**\n\n{mentions}")
+                    await event.reply(f"👑 **Group Admins:**\n\n{mentions}")
                     mentions = mention + " "
                     count = 1
                     total += 1
                     await asyncio.sleep(2)
         
         if mentions:
-            await event.reply(f"👑 **Admins:**\n\n{mentions}")
+            await event.reply(f"👑 **Group Admins:**\n\n{mentions}")
         
         await msg.delete()
         await event.reply(f"✅ {total} admins mentioned!")
@@ -377,8 +447,8 @@ async def admins_command(event):
         await event.reply(f"❌ Error: {str(e)}")
 
 @client.on(events.NewMessage(pattern='/random'))
-async def random_command(event):
-    """Handle /random command"""
+async def random_handler(event):
+    """Random mentions"""
     if not event.is_group:
         await event.reply("❌ This command only works in groups!")
         return
@@ -428,7 +498,7 @@ async def random_command(event):
             mentions += f"[{emoji}](tg://user?id={user.id}) "
         
         await msg.delete()
-        await event.reply(f"🎲 **{count} Random:**\n\n{mentions}")
+        await event.reply(f"🎲 **{count} Random Members:**\n\n{mentions}")
         
     except Exception as e:
         await event.reply(f"❌ Error: {str(e)}")
@@ -438,7 +508,7 @@ async def random_command(event):
 # ==============================================
 
 @client.on(events.NewMessage(pattern='/stop'))
-async def stop_command(event):
+async def stop_handler(event):
     """Stop mentions"""
     if not event.is_group:
         await event.reply("❌ This command only works in groups!")
@@ -450,10 +520,10 @@ async def stop_command(event):
         return
     
     set_stop(event.chat_id, True)
-    await event.reply("⏸️ **Mentions stopped!** Use /resume")
+    await event.reply("⏸️ **Mentions stopped!** Use /resume to start again.")
 
 @client.on(events.NewMessage(pattern='/resume'))
-async def resume_command(event):
+async def resume_handler(event):
     """Resume mentions"""
     if not event.is_group:
         await event.reply("❌ This command only works in groups!")
@@ -468,8 +538,8 @@ async def resume_command(event):
     await event.reply("▶️ **Mentions resumed!**")
 
 @client.on(events.NewMessage(pattern='/pause'))
-async def pause_command(event):
-    """Pause mentions (same as stop)"""
+async def pause_handler(event):
+    """Pause mentions"""
     if not event.is_group:
         await event.reply("❌ This command only works in groups!")
         return
@@ -480,10 +550,10 @@ async def pause_command(event):
         return
     
     set_stop(event.chat_id, True)
-    await event.reply("⏸️ **Mentions paused!** Use /resume")
+    await event.reply("⏸️ **Mentions paused!** Use /resume to resume.")
 
 @client.on(events.NewMessage(pattern='/broadcast'))
-async def broadcast_command(event):
+async def broadcast_handler(event):
     """Broadcast to all groups"""
     user_id = event.sender_id
     if user_id not in ADMIN_IDS:
@@ -515,7 +585,7 @@ async def broadcast_command(event):
         
         for i, group in enumerate(groups, 1):
             try:
-                await client.send_message(group.id, f"📢 **Broadcast**\n\n{msg_text}")
+                await client.send_message(group.id, f"📢 **Broadcast Message**\n\n{msg_text}")
                 success += 1
                 
                 if i % 5 == 0:
@@ -531,7 +601,7 @@ async def broadcast_command(event):
         await progress.edit(f"❌ Error: {str(e)}")
 
 @client.on(events.NewMessage(pattern='/stats'))
-async def stats_command(event):
+async def stats_handler(event):
     """Bot statistics"""
     user_id = event.sender_id
     if user_id not in ADMIN_IDS:
@@ -550,7 +620,6 @@ async def stats_command(event):
 **Users:** {len(users)}
 **Admins:** {len(ADMIN_IDS)}
 **Owner:** `{OWNER_ID}`
-**Languages:** {len(LANGUAGES)}+
 """
         await event.reply(text)
         
@@ -558,63 +627,154 @@ async def stats_command(event):
         await event.reply(f"❌ Error: {str(e)}")
 
 # ==============================================
-# LANGUAGE COMMAND
-# ==============================================
-
-@client.on(events.NewMessage(pattern='/lang'))
-async def lang_command(event):
-    """Change language"""
-    user_id = event.sender_id
-    parts = event.message.text.split()
-    
-    if len(parts) < 2:
-        # Show available languages
-        text = "🌐 **Available Languages:**\n\n"
-        for code, flag, name in TOP_LANGUAGES[:10]:
-            text += f"• `{code}` - {flag} {name}\n"
-        text += "\nUsage: `/lang [code]`\nExample: `/lang hi` for Hindi"
-        await event.reply(text)
-        return
-    
-    lang_code = parts[1].lower()
-    if lang_code in LANGUAGES:
-        user_languages[str(user_id)] = lang_code
-        save_user_languages()
-        await event.reply(f"✅ Language changed to {LANGUAGES[lang_code]['flag']} {LANGUAGES[lang_code]['name']}!")
-    else:
-        await event.reply("❌ Invalid language code!")
-
-# ==============================================
-# BUTTON HANDLER
+# CALLBACK HANDLER (BUTTONS)
 # ==============================================
 
 @client.on(events.CallbackQuery)
 async def callback_handler(event):
-    """Handle button clicks"""
-    data = event.data.decode()
+    """Handle all button clicks"""
     user_id = event.sender_id
+    data = event.data.decode()
+    is_admin = user_id in ADMIN_IDS
     
-    if data == 'back':
-        await event.edit("🔙 Back to main menu")
+    if data == 'support':
+        await event.answer("Opening support...")
+        await event.edit(
+            "📞 **Support Group**\n\n"
+            "Join our support group:\n"
+            "https://t.me/your_support_group",
+            buttons=[[Button.inline("🔙 Back", b'main_menu')]]
+        )
+    
+    elif data == 'add_group':
+        await event.answer("Adding to group...")
+        bot_username = (await client.get_me()).username
+        await event.edit(
+            f"➕ **Add Me to Your Group**\n\n"
+            f"1. Click: https://t.me/{bot_username}?startgroup=start\n"
+            f"2. Select your group\n"
+            f"3. Make me admin",
+            buttons=[[Button.inline("🔙 Back", b'main_menu')]]
+        )
+    
+    elif data == 'settings':
+        await event.edit(
+            "⚙️ **Bot Settings**\n\nSelect a category:",
+            buttons=get_settings_buttons()
+        )
+    
+    elif data == 'language':
+        await event.edit(
+            "🌐 **Select Language**",
+            buttons=get_language_buttons()
+        )
+    
+    elif data == 'commands':
+        await event.edit(
+            "📋 **Commands Menu**",
+            buttons=get_commands_buttons(is_admin)
+        )
+    
+    elif data == 'main_menu':
+        msg = f"""
+🌟 **Welcome to Mention Bot!** 🌟
+
+👋 Hello!
+
+**Your Information:**
+• ID: `{user_id}`
+• Status: {'👑 ADMIN' if is_admin else '👤 USER'}
+• Owner: `{OWNER_ID}`
+"""
+        await event.edit(msg, buttons=get_main_menu_buttons())
+    
     elif data == 'close':
         await event.delete()
+    
+    elif data == 'cmds_user':
+        text = "👤 **USER COMMANDS:**\n\n"
+        text += "• /start - Start bot\n"
+        text += "• /help - Show help"
+        await event.edit(text, buttons=[[Button.inline("🔙 Back", b'commands')]])
+    
+    elif data == 'cmds_mention':
+        text = "📢 **MENTION COMMANDS:**\n\n"
+        text += "• @all - Mention everyone\n"
+        text += "• @tagall - Mention everyone\n"
+        text += "• /tagall - Mention everyone\n"
+        text += "• /all - Mention everyone\n"
+        text += "• /online - Mention online\n"
+        text += "• /admins - Mention admins\n"
+        text += "• /random [n] - Random"
+        await event.edit(text, buttons=[[Button.inline("🔙 Back", b'commands')]])
+    
+    elif data == 'cmds_admin':
+        if is_admin:
+            text = "👑 **ADMIN COMMANDS:**\n\n"
+            text += "• /broadcast [msg] - Broadcast\n"
+            text += "• /stop - Stop mentions\n"
+            text += "• /resume - Resume mentions\n"
+            text += "• /stats - Statistics\n"
+            text += "• /pause - Pause"
+            await event.edit(text, buttons=[[Button.inline("🔙 Back", b'commands')]])
+        else:
+            await event.answer("Admins only!", alert=True)
+    
+    elif data == 'settings_mention':
+        await event.edit(
+            "📢 **Mention Settings**\n\n"
+            "• Max: 50 per message\n"
+            "• Delay: 2 seconds\n"
+            "• Emojis: ✅ ON",
+            buttons=[[Button.inline("🔙 Back", b'settings')]]
+        )
+    
+    elif data == 'settings_admin':
+        await event.edit(
+            f"👑 **Admin Settings**\n\n"
+            f"• Total Admins: {len(ADMIN_IDS)}\n"
+            f"• Owner: `{OWNER_ID}`\n"
+            f"• You: {'✅ Admin' if is_admin else '❌ Not Admin'}",
+            buttons=[[Button.inline("🔙 Back", b'settings')]]
+        )
+    
+    elif data == 'settings_group':
+        await event.edit(
+            "👥 **Group Settings**\n\n"
+            "• /stop - Stop mentions\n"
+            "• /resume - Resume\n"
+            "• /pause - Pause",
+            buttons=[[Button.inline("🔙 Back", b'settings')]]
+        )
+    
+    elif data.startswith('lang_'):
+        lang = data.replace('lang_', '')
+        user_languages[str(user_id)] = lang
+        save_user_languages()
+        await event.answer(f"Language changed!")
+        await event.edit(
+            f"✅ Language changed to {LANGUAGES[lang]['flag']} {LANGUAGES[lang]['name']}",
+            buttons=[[Button.inline("🔙 Back", b'main_menu')]]
+        )
 
 # ==============================================
 # START BOT
 # ==============================================
 
-print("\n" + "="*40)
-print("🚀 MENTION BOT STARTED")
-print("="*40)
+print("\n" + "="*50)
+print("🚀 MENTION BOT STARTED - ALL COMMANDS WORKING")
+print("="*50)
 print(f"👑 Owner: {OWNER_ID}")
 print(f"👥 Admins: {ADMIN_IDS}")
-print(f"🌐 Languages: {len(LANGUAGES)}+")
 print("\n📋 Commands Ready:")
 print("  • @all, @tagall, /tagall, /all")
 print("  • /online, /admins, /random")
 print("  • /broadcast, /stop, /resume")
-print("  • /pause, /stats, /lang")
-print("="*40 + "\n")
+print("  • /pause, /stats")
+print("\n🔘 Buttons Ready:")
+print("  • Support, Add to Group, Settings")
+print("  • Language, Commands, Close")
+print("="*50 + "\n")
 
 try:
     client.run_until_disconnected()
